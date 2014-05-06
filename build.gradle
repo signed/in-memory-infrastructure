@@ -1,7 +1,8 @@
-subprojects{
-    apply plugin:'java'
+apply plugin: 'idea'
+subprojects {
+    apply plugin: 'java'
 
-    repositories{
+    repositories {
         mavenLocal()
         mavenCentral()
     }
