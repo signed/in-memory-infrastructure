@@ -12,3 +12,6 @@
 
 ### http
 [stackoverflow with list of recomendations](http://stackoverflow.com/questions/393099/mocking-http-server)
+
+### nosql databases
+[nosql-unit](https://github.com/lordofthejars/nosql-unit)
