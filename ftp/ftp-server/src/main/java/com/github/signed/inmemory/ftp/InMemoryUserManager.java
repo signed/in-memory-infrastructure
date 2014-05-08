@@ -1,4 +1,4 @@
-package infrastructure.ftp;
+package com.github.signed.inmemory.ftp;
 
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;

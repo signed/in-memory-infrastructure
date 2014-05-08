@@ -2,5 +2,10 @@ dependencies {
 
     compile(
             'junit:junit:4.11'
+            , project(':ftp:ftp-server')
+    )
+
+    testCompile(
+            'commons-net:commons-net:3.3'
     )
 }
