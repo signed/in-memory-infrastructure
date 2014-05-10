@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        maven { url 'http://jcenter.bintray.com' }
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+    }
+}
+
 apply plugin: 'idea'
 idea { project { languageLevel = '1.6' } }
 
@@ -21,6 +30,7 @@ subprojects {
 configure(subprojects.findAll { !'in-memory-infrastructure'.equals(it.parent.name) }) {
     apply plugin: 'java'
     apply plugin: 'idea'
+    apply from: "$rootDir/gradle/buildscript/bintray.gradle"
 
     repositories {
         mavenLocal()
