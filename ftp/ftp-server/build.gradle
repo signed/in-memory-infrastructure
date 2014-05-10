@@ -1,7 +1,58 @@
-dependencies {
+buildscript {
+    repositories {
+        maven { url 'http://jcenter.bintray.com' }
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+    }
+}
+apply plugin: 'bintray'
+apply plugin: 'maven-publish'
 
+dependencies {
     compile(
             'org.apache.ftpserver:ftpserver-core:1.0.6'
             , 'org.slf4j:slf4j-simple:1.7.5'
     )
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', 'in memory infrastructure')
+                root.appendNode('description', 'A collection of easy to use in memory servers for testing.')
+                root.appendNode('inceptionYear', '2014')
+
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', 'https://github.com/signed/in-memory-infrastructure')
+                scm.appendNode('connection', 'scm:https://github.com/signed/in-memory-infrastructure.git')
+                scm.appendNode('developerConnection', 'scm:git@github.com:signed/in-memory-infrastructure.git')
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'The Apache Software License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+                license.appendNode('distribution', 'repo')
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.getProperty('bintrayUser') : null
+    key =  project.hasProperty('bintrayKey') ? project.getProperty('bintrayKey') : null
+    publications = ['mavenJava']
+    pkg {
+        repo = 'maven'
+        name = 'in-memory-infrastructure'
+        licenses = ['Apache-2.0']
+    }
 }
