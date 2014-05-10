@@ -2,7 +2,6 @@ apply plugin: 'idea'
 idea { project { languageLevel = '1.6' } }
 
 subprojects {
-    apply plugin: 'idea'
     version = '0.0.1'
 
     plugins.withType(JavaPlugin){
@@ -11,11 +10,17 @@ subprojects {
                     'junit:junit:4.11'
             )
         }
+
+        task sourcesJar(type: Jar) {
+            classifier 'sources'
+            from sourceSets.main.allSource
+        }
     }
 }
 
 configure(subprojects.findAll { !'in-memory-infrastructure'.equals(it.parent.name) }) {
     apply plugin: 'java'
+    apply plugin: 'idea'
 
     repositories {
         mavenLocal()
