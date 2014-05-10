@@ -4,6 +4,14 @@ idea { project { languageLevel = '1.6' } }
 subprojects {
     apply plugin: 'idea'
     version = '0.0.1'
+
+    plugins.withType(JavaPlugin){
+        dependencies {
+            testCompile(
+                    'junit:junit:4.11'
+            )
+        }
+    }
 }
 
 configure(subprojects.findAll { !'in-memory-infrastructure'.equals(it.parent.name) }) {
@@ -18,14 +26,6 @@ configure(subprojects.findAll { !'in-memory-infrastructure'.equals(it.parent.nam
 configure(subprojects.findAll { it.name.endsWith('-junit') }) {
     dependencies {
         compile(
-                'junit:junit:4.11'
-        )
-    }
-}
-
-configure(subprojects.findAll { it.name.endsWith('-junit') }) {
-    dependencies {
-        testCompile(
                 'junit:junit:4.11'
         )
     }
