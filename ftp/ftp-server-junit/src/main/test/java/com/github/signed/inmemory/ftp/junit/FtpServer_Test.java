@@ -16,7 +16,7 @@ public class FtpServer_Test {
     public FtpServer ftpServer = new FtpServer(new FtpServerConfigurationBuilder().listeningOnPort(10021).registerAccountFor("bob", "secret"));
 
     @Test
-    public void startFtpServer() throws Exception {
+    public void startFtpServerSoClientsCanConnect() throws Exception {
         FTPClient client = new FTPClient();
         client.connect(InetAddress.getLocalHost(), ftpServer.port);
         client.login("bob", "secret");
