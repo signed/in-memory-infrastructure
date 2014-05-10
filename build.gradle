@@ -36,6 +36,8 @@ configure(subprojects.findAll { !'in-memory-infrastructure'.equals(it.parent.nam
         mavenLocal()
         mavenCentral()
     }
+
+    group 'com.github.signed.inmemory.'+parent.name
 }
 
 configure(subprojects.findAll { it.name.endsWith('-junit') }) {
