@@ -3,17 +3,17 @@ package com.github.signed.inmemory.ftp.junit;
 import com.github.signed.inmemory.ftp.FtpServerConfigurationBuilder;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.net.InetAddress;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class FtpServer_Test {
+public class FtpServer_ConnectTest {
 
-    @Rule
-    public FtpServer ftpServer = new FtpServer(new FtpServerConfigurationBuilder().listeningOnPort(10021).registerAccountFor("bob", "secret"));
+    @ClassRule
+    public static FtpServer ftpServer = new FtpServer(new FtpServerConfigurationBuilder().listeningOnPort(10021).registerAccountFor("bob", "secret"));
 
     @Test
     public void startFtpServerSoClientsCanConnect() throws Exception {

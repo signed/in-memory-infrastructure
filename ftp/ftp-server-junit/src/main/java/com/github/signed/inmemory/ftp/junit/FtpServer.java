@@ -5,6 +5,8 @@ import com.github.signed.inmemory.ftp.FtpServerConfigurationBuilder;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
+
 public class FtpServer extends ExternalResource{
     private final TemporaryFolder ftpRoot = new TemporaryFolder();
     private final FtpServerConfigurationBuilder configurationBuilder;
@@ -29,5 +31,9 @@ public class FtpServer extends ExternalResource{
     protected void after() {
         ftpServer.stop();
         ftpRoot.delete();
+    }
+
+    public File fileUploadedBy(String username) {
+        return ftpServer.fileUploadedBy(username);
     }
 }

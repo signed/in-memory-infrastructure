@@ -11,8 +11,12 @@ public class UserHomeCreator {
     }
 
     public File createUserHome(String userName) {
-        File userHome = new File(temporaryFtpRoot, userName);
+        File userHome = userHomeFor(userName);
         userHome.mkdirs();
         return userHome;
+    }
+
+    public File userHomeFor(String userName) {
+        return new File(temporaryFtpRoot, userName);
     }
 }

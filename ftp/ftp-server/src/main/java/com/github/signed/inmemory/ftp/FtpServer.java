@@ -10,6 +10,7 @@ import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,10 @@ public class FtpServer {
 
     private org.apache.ftpserver.FtpServer server;
     private final FtpServerConfiguration configuration;
+    private final UserHomeCreator userHomeCreator;
 
     public FtpServer(FtpServerConfiguration configuration) {
+        userHomeCreator = new UserHomeCreator(configuration.rootDirectory);
         this.configuration = configuration;
     }
 
@@ -41,9 +44,23 @@ public class FtpServer {
         server.stop();
     }
 
+    public File fileUploadedBy(String username) {
+        File file = userHomeCreator.userHomeFor(username);
+        if (!file.isDirectory()) {
+            throw new RuntimeException(String.format("I'm sorry, but I do not know <%s>.", username));
+        }
+        File[] files = file.listFiles();
+        if (files.length < 1) {
+            throw new RuntimeException(String.format("I'm sorry, but <%s> did not upload any files.", username));
+        }
+        if (files.length > 1) {
+            throw new RuntimeException(String.format("Actually <%s> uploaded <%d> files. I'm sorry, but I do not know which one you want.", username, files.length));
+        }
+        return files[0];
+    }
+
     private InMemoryUserManager createUserManager() throws FtpException {
         InMemoryUserManager userManager = new InMemoryUserManager();
-        UserHomeCreator userHomeCreator = new UserHomeCreator(configuration.rootDirectory);
 
         for (FtpUser user : configuration.users) {
             BaseUser baseUser = new BaseUser();
