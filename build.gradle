@@ -23,6 +23,12 @@ subprojects {
                     'junit:junit:4.11'
             )
         }
+
+        jar {
+            from ("$rootDir/license"){
+                into 'META-INF/'
+            }
+        }
     }
 }
 
