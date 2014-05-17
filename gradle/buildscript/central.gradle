@@ -1,0 +1,63 @@
+apply plugin: 'nexus'
+
+modifyPom {
+    project {
+        name 'in memory infrastructure'
+        description 'A collection of easy to use in memory servers for testing.'
+        url 'https://github.com/signed/in-memory-infrastructure'
+        inceptionYear '2014'
+
+        licenses {
+            license {
+                name 'Apache 2.0 License'
+                url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        scm {
+            url 'https://github.com/signed/in-memory-infrastructure'
+            connection 'scm:https://github.com/signed/in-memory-infrastructure.git'
+            developerConnection 'scm:git@github.com:signed/in-memory-infrastructure.git'
+        }
+    }
+}
+
+def environments = [
+        'local': [
+                repositoryLogin: deploymentNexusLocalLogin,
+                repositoryPassword: deploymentNexusLocalPassword,
+                'urls': [
+                        'snapshot': 'http://localhost:8081/nexus/content/repositories/snapshots',
+                        'release' : 'http://localhost:8081/nexus/content/repositories/releases'
+
+                ]
+        ],
+        'sonatype': [
+                repositoryLogin: deploymentSonatypeLogin,
+                repositoryPassword: deploymentSonatypePassword,
+                'urls': [
+                        'snapshot': 'https://oss.sonatype.org/content/repositories/snapshots',
+                        'release' : 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+                ]
+        ]
+]
+
+def intent = hasProperty('release') ? 'release' : 'snapshot'
+def target = hasProperty('sonatype') ? 'sonatype' : 'local'
+println "intent: $intent target: $target url: ${environments.get(target).urls.get(intent)}"
+
+def environment = environments.get(target)
+if (project.hasProperty('release')) {
+    project.version -= '-SNAPSHOT'
+}
+
+ext.nexusUsername = environment.repositoryLogin
+ext.nexusPassword = environment.repositoryPassword
+
+nexus {
+    attachJavadoc = true
+    attachTests = true
+    sign = true
+    repositoryUrl = environment.urls.release
+    snapshotRepositoryUrl = environment.urls.snapshot
+}

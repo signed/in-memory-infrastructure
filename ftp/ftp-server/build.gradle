@@ -1,3 +1,5 @@
+apply from: "$rootDir/gradle/buildscript/central.gradle"
+
 dependencies {
     compile(
             'org.apache.ftpserver:ftpserver-core:1.0.6'

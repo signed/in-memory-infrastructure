@@ -1,28 +1,27 @@
+apply plugin: 'idea'
+
 buildscript {
     repositories {
-        maven { url 'http://jcenter.bintray.com' }
+        jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+        classpath(
+                'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+                , 'org.gradle.api.plugins:gradle-nexus-plugin:0.7'
+        )
     }
 }
 
-apply plugin: 'idea'
 idea { project { languageLevel = '1.6' } }
 
 subprojects {
-    version = '0.0.1'
+    version = '0.0.1-SNAPSHOT'
 
-    plugins.withType(JavaPlugin){
+    plugins.withType(JavaPlugin) {
         dependencies {
             testCompile(
                     'junit:junit:4.11'
             )
-        }
-
-        task sourcesJar(type: Jar) {
-            classifier 'sources'
-            from sourceSets.main.allSource
         }
     }
 }
@@ -30,14 +29,13 @@ subprojects {
 configure(subprojects.findAll { !'in-memory-infrastructure'.equals(it.parent.name) }) {
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply from: "$rootDir/gradle/buildscript/bintray.gradle"
 
     repositories {
         mavenLocal()
         mavenCentral()
     }
 
-    group 'com.github.signed.inmemory.'+parent.name
+    group 'com.github.signed.inmemory.' + parent.name
 }
 
 configure(subprojects.findAll { it.name.endsWith('-junit') }) {
