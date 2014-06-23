@@ -19,6 +19,14 @@ modifyPom {
             connection 'scm:https://github.com/signed/in-memory-infrastructure.git'
             developerConnection 'scm:git@github.com:signed/in-memory-infrastructure.git'
         }
+
+        developers {
+            developer {
+                id 'thomasheilbronner'
+                name 'Thomas Heilbronner'
+            }
+        }
+
     }
 }
 
