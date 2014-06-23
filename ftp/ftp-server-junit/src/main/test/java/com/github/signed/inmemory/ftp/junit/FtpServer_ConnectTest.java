@@ -1,14 +1,15 @@
 package com.github.signed.inmemory.ftp.junit;
 
-import com.github.signed.inmemory.ftp.FtpServerConfigurationBuilder;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.net.InetAddress;
+
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.net.InetAddress;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.github.signed.inmemory.ftp.FtpServerConfigurationBuilder;
 
 public class FtpServer_ConnectTest {
 
@@ -25,6 +26,6 @@ public class FtpServer_ConnectTest {
 
         client.logout();
         client.disconnect();
-        assertThat("connect did not completed successfull", FTPReply.isPositiveCompletion(replyCode));
+        assertThat("connect did not completed successful", FTPReply.isPositiveCompletion(replyCode));
     }
 }
