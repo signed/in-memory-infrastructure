@@ -4,4 +4,8 @@ dependencies {
             'org.apache.activemq:activemq-broker:5.9.0'
             , 'org.slf4j:slf4j-simple:1.7.5'
     )
+
+    compile(
+            'org.hornetq:hornetq-jms-server:2.4.3.Final'
+    )
 }
