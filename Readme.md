@@ -19,6 +19,12 @@ http://hornetq.sourceforge.net/docs/hornetq-2.0.0.BETA5/user-manual/en/html/conf
 
 http://hornetq.blogspot.de/2009/10/understanding-connectors-acceptors.html
 
+https://community.jboss.org/thread/196255?tstart=0
+JNDI connect code to jboss
+
+
+http://myjavanotebook.blogspot.de/2008/04/use-jndi-with-your-j2se-application.html
+how to run your own jndi server
 ### mail
 [greenmail](http://www.icegreen.com/greenmail/)
 

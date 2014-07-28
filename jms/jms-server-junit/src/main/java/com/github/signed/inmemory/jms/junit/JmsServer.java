@@ -2,7 +2,11 @@ package com.github.signed.inmemory.jms.junit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.hornetq.api.core.TransportConfiguration;
 import org.hornetq.core.config.Configuration;
@@ -17,6 +21,8 @@ import org.hornetq.jms.server.config.impl.ConnectionFactoryConfigurationImpl;
 import org.hornetq.jms.server.config.impl.JMSConfigurationImpl;
 import org.hornetq.jms.server.config.impl.JMSQueueConfigurationImpl;
 import org.hornetq.jms.server.embedded.EmbeddedJMS;
+import org.jnp.server.Main;
+import org.jnp.server.NamingBeanImpl;
 import org.junit.rules.ExternalResource;
 
 public class JmsServer extends ExternalResource {
@@ -28,19 +34,36 @@ public class JmsServer extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-        // Step 1. Create HornetQ core configuration, and set the properties accordingly
-        Configuration configuration = new ConfigurationImpl();
-        configuration.setPersistenceEnabled(false);
-        configuration.setJournalDirectory("build/data/journal");
-        configuration.setSecurityEnabled(false);
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put(TransportConstants.HOST_PROP_NAME, "localhost");
-        params.put(TransportConstants.PORT_PROP_NAME, 5446);
-        configuration.getAcceptorConfigurations().add(new TransportConfiguration(NettyAcceptorFactory.class.getName(), params));
-        TransportConfiguration connectorConfig = new TransportConfiguration(NettyConnectorFactory.class.getName());
-        configuration.getConnectorConfigurations().put("connector", connectorConfig);
 
-        // Step 2. Create the JMS configuration
+        System.setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
+        System.setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
+
+        NamingBeanImpl naming = new NamingBeanImpl();
+        naming.start();
+
+        Main jndiServer = new Main();
+        jndiServer.setNamingInfo(naming);
+        jndiServer.setPort(1099);
+        jndiServer.setBindAddress("localhost");
+        jndiServer.setRmiPort(1098);
+        jndiServer.setRmiBindAddress("localhost");
+        jndiServer.start();
+
+        Hashtable<String, String> env = new Hashtable<String, String>();
+        env.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
+        env.put("java.naming.provider.url", "jnp://localhost:1099");
+        env.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
+        Context context = new InitialContext(env);
+
+        jmsServer = new EmbeddedJMS();
+        jmsServer.setConfiguration(coreConfiguration());
+        JMSConfiguration jmsConfiguration = jmsConfiguration();
+        jmsConfiguration.setContext(context);
+        jmsServer.setJmsConfiguration(jmsConfiguration);
+        jmsServer.start();
+    }
+
+    private JMSConfiguration jmsConfiguration() {
         JMSConfiguration jmsConfig = new JMSConfigurationImpl();
 
         // Step 3. Configure the JMS ConnectionFactory
@@ -52,12 +75,21 @@ public class JmsServer extends ExternalResource {
         // Step 4. Configure the JMS Queue
         JMSQueueConfiguration queueConfig = new JMSQueueConfigurationImpl("queue1", null, false, "/queue/queue1");
         jmsConfig.getQueueConfigurations().add(queueConfig);
+        return jmsConfig;
+    }
 
-        // Step 5. Start the JMS Server using the HornetQ core server and the JMS configuration
-        jmsServer = new EmbeddedJMS();
-        jmsServer.setConfiguration(configuration);
-        jmsServer.setJmsConfiguration(jmsConfig);
-        jmsServer.start();
+    private Configuration coreConfiguration() {
+        Configuration configuration = new ConfigurationImpl();
+        configuration.setPersistenceEnabled(false);
+        configuration.setJournalDirectory("build/data/journal");
+        configuration.setSecurityEnabled(false);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(TransportConstants.HOST_PROP_NAME, "localhost");
+        params.put(TransportConstants.PORT_PROP_NAME, 5446);
+        configuration.getAcceptorConfigurations().add(new TransportConfiguration(NettyAcceptorFactory.class.getName(), params));
+        TransportConfiguration connectorConfig = new TransportConfiguration(NettyConnectorFactory.class.getName(), params);
+        configuration.getConnectorConfigurations().put("connector", connectorConfig);
+        return configuration;
     }
 
     @Override
