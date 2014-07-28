@@ -1,16 +1,26 @@
 package com.github.signed.inmemory.jms.junit;
 
-import java.util.Hashtable;
-import java.util.Properties;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.print.attribute.standard.Destination;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+
+import org.hornetq.api.core.TransportConfiguration;
+import org.hornetq.api.jms.HornetQJMSClient;
+import org.hornetq.api.jms.JMSFactoryType;
+import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
+import org.hornetq.core.remoting.impl.netty.TransportConstants;
 import org.junit.Rule;
 import org.junit.Test;
-
-import com.oracle.jrockit.jfr.Producer;
 
 public class JmsServer_ConnectTest {
 
@@ -19,35 +29,23 @@ public class JmsServer_ConnectTest {
     public JmsServer jmsServer = new JmsServer();
 
     @Test
-    public void startJmsServerSoClientsCanOpenAnInitialContext() throws Exception {
-        Properties props = new Properties();
-        props.put("java.naming.factory.initial","org.jnp.interfaces.NamingContextFactory");
-        props.put("java.naming.provider.url", "jnp://localhost:1099");
-        props.put("java.naming.factory.url.pkgs","org.jboss.naming:org.jnp.interfaces");
-        InitialContext initialContext = new InitialContext(props);
-    }
+    public void sendAndReceiveMessageDirectlyWithHornetQ() throws Exception {
+        Map<String, Object> connectionParams = new HashMap<String, Object>();
+        connectionParams.put(TransportConstants.HOST_PROP_NAME, "localhost");
+        connectionParams.put(TransportConstants.PORT_PROP_NAME, 5446);
 
-    @Test
-    public void stackoverflow() throws Exception {
-        Hashtable<String, String> env = new Hashtable<String, String>();
-        env.put(Context.PROVIDER_URL, "jnp://localhost:1099");
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
-        env.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
-
-        Context context = new InitialContext(env);
-
-        ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup("ConnectionFactory");
-        Destination destination = (Destination) context.lookup("/queue/exampleQueue");
-
-        Connection connection = connectionFactory.createConnection();
+        ConnectionFactory cf = HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, new TransportConfiguration(NettyConnectorFactory.class.getName(), connectionParams));
+        Queue queue = HornetQJMSClient.createQueue("queue1");
+        Connection connection = cf.createConnection();
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Producer producer = session.createProducer(destination);
-        connection.start();
-
-        TextMessage message = session.createTextMessage("Hello sent at " + new Date());
-        System.out.println("Sending message: " + message.getText());
+        MessageProducer producer = session.createProducer(queue);
+        TextMessage message = session.createTextMessage("Hello World");
         producer.send(message);
+        MessageConsumer messageConsumer = session.createConsumer(queue);
+        connection.start();
+        TextMessage messageReceived = (TextMessage) messageConsumer.receive(1000);
 
-
+        assertThat(messageReceived.getText(), is("Hello World"));
+        connection.close();
     }
 }

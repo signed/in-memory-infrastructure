@@ -1,0 +1,9 @@
+
+
+dependencies{
+    compile(
+            'junit:junit:4.11'
+            , 'org.hornetq:hornetq-jms-client:2.4.3.Final'
+            , project(':jms:jms-server')
+    )
+}
