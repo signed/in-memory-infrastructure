@@ -15,6 +15,10 @@ https://github.com/krukow/stomple/blob/master/hornetq/examples/jms/embedded/src/
 
 http://hornetq.blogspot.de/2009/09/hornetq-simple-example-using-maven.html
 
+http://hornetq.sourceforge.net/docs/hornetq-2.0.0.BETA5/user-manual/en/html/configuring-transports.html
+
+http://hornetq.blogspot.de/2009/10/understanding-connectors-acceptors.html
+
 ### mail
 [greenmail](http://www.icegreen.com/greenmail/)
 
