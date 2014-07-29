@@ -20,6 +20,7 @@ import org.hornetq.jms.server.config.JMSQueueConfiguration;
 import org.hornetq.jms.server.config.impl.ConnectionFactoryConfigurationImpl;
 import org.hornetq.jms.server.config.impl.JMSConfigurationImpl;
 import org.hornetq.jms.server.config.impl.JMSQueueConfigurationImpl;
+import org.hornetq.jms.server.config.impl.TopicConfigurationImpl;
 import org.hornetq.jms.server.embedded.EmbeddedJMS;
 import org.jnp.server.Main;
 import org.jnp.server.NamingBeanImpl;
@@ -36,9 +37,7 @@ public class JmsServer extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-
-        System.setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
-        System.setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
+        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
 
         naming = new NamingBeanImpl();
         naming.start();
@@ -52,9 +51,8 @@ public class JmsServer extends ExternalResource {
         jndiServer.start();
 
         Hashtable<String, String> env = new Hashtable<String, String>();
-        env.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
-        env.put("java.naming.provider.url", "jnp://localhost:1099");
-        env.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
+        env.put(Context.PROVIDER_URL, "jnp://localhost:1099");
         Context context = new InitialContext(env);
 
         jmsServer = new EmbeddedJMS();
@@ -77,6 +75,8 @@ public class JmsServer extends ExternalResource {
         // Step 4. Configure the JMS Queue
         JMSQueueConfiguration queueConfig = new JMSQueueConfigurationImpl("queue1", null, false, "/queue/queue1");
         jmsConfig.getQueueConfigurations().add(queueConfig);
+
+        jmsConfig.getTopicConfigurations().add(new TopicConfigurationImpl("topic1", "topic/topic1"));
         return jmsConfig;
     }
 
@@ -96,11 +96,11 @@ public class JmsServer extends ExternalResource {
 
     @Override
     protected void after() {
-        try{
+        try {
             jmsServer.stop();
             jndiServer.stop();
             naming.stop();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
