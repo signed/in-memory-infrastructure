@@ -22,6 +22,9 @@ http://hornetq.blogspot.de/2009/10/understanding-connectors-acceptors.html
 https://community.jboss.org/thread/196255?tstart=0
 JNDI connect code to jboss
 
+https://github.com/eis/jboss-mq-integration-example
+sample code 
+
 
 http://myjavanotebook.blogspot.de/2008/04/use-jndi-with-your-j2se-application.html
 how to run your own jndi server

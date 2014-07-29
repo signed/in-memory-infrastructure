@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
@@ -36,21 +37,10 @@ public class JmsServer_ConnectTest {
         Map<String, Object> connectionParams = new HashMap<String, Object>();
         connectionParams.put(TransportConstants.HOST_PROP_NAME, "localhost");
         connectionParams.put(TransportConstants.PORT_PROP_NAME, 5446);
-
         ConnectionFactory cf = HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, new TransportConfiguration(NettyConnectorFactory.class.getName(), connectionParams));
         Queue queue = HornetQJMSClient.createQueue("queue1");
 
-        Connection connection = cf.createConnection();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        MessageProducer producer = session.createProducer(queue);
-        TextMessage message = session.createTextMessage("Hello World");
-        producer.send(message);
-        MessageConsumer messageConsumer = session.createConsumer(queue);
-        connection.start();
-        TextMessage messageReceived = (TextMessage) messageConsumer.receive(1000);
-
-        assertThat(messageReceived.getText(), is("Hello World"));
-        connection.close();
+        assertThatProduceConsumeRoundTripIsWorking(cf, queue);
     }
 
     @Test
@@ -61,10 +51,12 @@ public class JmsServer_ConnectTest {
         env.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
         Context context = new InitialContext(env);
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup("/cf");
-        Queue queue = (Queue) context.lookup("jms/queue/queue1");
+        Queue queue = (Queue) context.lookup("queue/queue1");
 
+        assertThatProduceConsumeRoundTripIsWorking(connectionFactory, queue);
+    }
 
-
+    private void assertThatProduceConsumeRoundTripIsWorking(ConnectionFactory connectionFactory, Queue queue) throws JMSException {
         Connection connection = connectionFactory.createConnection();
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         MessageProducer producer = session.createProducer(queue);
@@ -76,6 +68,5 @@ public class JmsServer_ConnectTest {
 
         assertThat(messageReceived.getText(), is("Hello World"));
         connection.close();
-
     }
 }

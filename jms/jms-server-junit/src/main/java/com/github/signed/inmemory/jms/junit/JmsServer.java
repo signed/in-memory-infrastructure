@@ -30,6 +30,8 @@ public class JmsServer extends ExternalResource {
 
     public int port;
     private EmbeddedJMS jmsServer;
+    private NamingBeanImpl naming;
+    private Main jndiServer;
 
 
     @Override
@@ -38,10 +40,10 @@ public class JmsServer extends ExternalResource {
         System.setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
         System.setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
 
-        NamingBeanImpl naming = new NamingBeanImpl();
+        naming = new NamingBeanImpl();
         naming.start();
 
-        Main jndiServer = new Main();
+        jndiServer = new Main();
         jndiServer.setNamingInfo(naming);
         jndiServer.setPort(1099);
         jndiServer.setBindAddress("localhost");
@@ -58,8 +60,8 @@ public class JmsServer extends ExternalResource {
         jmsServer = new EmbeddedJMS();
         jmsServer.setConfiguration(coreConfiguration());
         JMSConfiguration jmsConfiguration = jmsConfiguration();
-        jmsConfiguration.setContext(context);
         jmsServer.setJmsConfiguration(jmsConfiguration);
+        jmsServer.setContext(context);
         jmsServer.start();
     }
 
@@ -96,6 +98,8 @@ public class JmsServer extends ExternalResource {
     protected void after() {
         try{
             jmsServer.stop();
+            jndiServer.stop();
+            naming.stop();
         }catch (Exception ex) {
             throw new RuntimeException(ex);
         }
