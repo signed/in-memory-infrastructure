@@ -48,7 +48,6 @@ public class JmsServer_ConnectTest {
         Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.PROVIDER_URL, "jnp://localhost:1099");
         env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
-        env.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
         Context context = new InitialContext(env);
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup("/cf");
         Queue queue = (Queue) context.lookup("queue/queue1");
