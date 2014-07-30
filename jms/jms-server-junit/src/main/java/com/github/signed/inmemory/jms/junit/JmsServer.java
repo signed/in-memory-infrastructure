@@ -30,7 +30,7 @@ public class JmsServer extends ExternalResource {
     public int port;
     private EmbeddedJMS jmsServer;
 
-    private JndiServer jndiServer2;
+    private JndiServer jndiServer;
 
     public JmsServer() {
     }
@@ -38,11 +38,9 @@ public class JmsServer extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
-
-        jndiServer2 = new JndiServer();
-        jndiServer2.configure();
-        jndiServer2.start();
+        jndiServer = new JndiServer();
+        jndiServer.configure();
+        jndiServer.start();
 
         Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
@@ -55,20 +53,15 @@ public class JmsServer extends ExternalResource {
         jmsServer.setJmsConfiguration(jmsConfiguration);
         jmsServer.setContext(context);
         jmsServer.start();
-
-
     }
 
     private JMSConfiguration jmsConfiguration() {
         JMSConfiguration jmsConfig = new JMSConfigurationImpl();
-
-        // Step 3. Configure the JMS ConnectionFactory
         ArrayList<String> connectorNames = new ArrayList<String>();
         connectorNames.add("connector");
         ConnectionFactoryConfiguration cfConfig = new ConnectionFactoryConfigurationImpl("cf", false, connectorNames, "/cf");
         jmsConfig.getConnectionFactoryConfigurations().add(cfConfig);
 
-        // Step 4. Configure the JMS Queue
         JMSQueueConfiguration queueConfig = new JMSQueueConfigurationImpl("queue1", null, false, "/queue/queue1");
         jmsConfig.getQueueConfigurations().add(queueConfig);
 
@@ -94,7 +87,7 @@ public class JmsServer extends ExternalResource {
     protected void after() {
         try {
             jmsServer.stop();
-            jndiServer2.stop();
+            jndiServer.stop();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
