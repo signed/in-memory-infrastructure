@@ -6,7 +6,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -55,17 +54,6 @@ public class JmsServer_ConnectTest {
         Queue queue = (Queue) context.lookup("queue/queue1");
 
         assertThatProduceConsumeRoundTripIsWorking(connectionFactory, queue);
-    }
-
-
-    @Test
-    public void strom() throws Exception {
-        Properties properties = new Properties();
-        properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
-        properties.put(Context.PROVIDER_URL, "remote://localhost:4447"); //konfigurierbar
-        InitialContext initialContext = new InitialContext(properties);
-        ConnectionFactory connectionFactory = (ConnectionFactory)initialContext.lookup("RemoteConnectionFactory");
-
     }
 
     private void assertThatProduceConsumeRoundTripIsWorking(ConnectionFactory connectionFactory, Queue queue) throws JMSException {
