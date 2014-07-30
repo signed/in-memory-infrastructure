@@ -45,10 +45,14 @@ public class JndiServer {
         return String.format("jnp://%s:%d", configuration.jndi.address, configuration.jndi.port);
     }
 
-    public void start() throws Exception {
-        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, InitialContextFactory);
-        naming.start();
-        jndiServer.start();
+    public void start() {
+        try {
+            System.setProperty(Context.INITIAL_CONTEXT_FACTORY, InitialContextFactory);
+            naming.start();
+            jndiServer.start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void stop() {

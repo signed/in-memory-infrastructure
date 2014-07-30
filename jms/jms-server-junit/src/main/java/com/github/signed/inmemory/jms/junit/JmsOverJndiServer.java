@@ -1,6 +1,6 @@
 package com.github.signed.inmemory.jms.junit;
 
-import javax.naming.Context;
+import java.net.UnknownHostException;
 
 import org.junit.rules.ExternalResource;
 
@@ -10,34 +10,34 @@ import com.github.signed.inmemory.jms.JndiConfigurationBuilder;
 import com.github.signed.inmemory.jms.JndiServer;
 
 public class JmsOverJndiServer extends ExternalResource {
+    private final JndiServer jndiServer;
+    private final JmsServer jmsServer;
 
-
-    private JndiServer jndiServer;
-    private JmsServer jmsServer;
-
+    public JmsOverJndiServer() {
+        jndiServer = new JndiServer(JndiConfigurationBuilder.anyJndiConfiguration());
+        jmsServer = new JmsServer(JmsServerConfigurationBuilder.configuration());
+    }
 
     @Override
     protected void before() throws Throwable {
-        jndiServer = new JndiServer(JndiConfigurationBuilder.anyJndiConfiguration());
+        startJndi();
+        startJms();
+    }
+
+    private void startJndi() throws UnknownHostException {
         jndiServer.configure();
         jndiServer.start();
+    }
 
-        Context context = jndiServer.createContext();
-
-        jmsServer = new JmsServer(JmsServerConfigurationBuilder.configuration());
+    private void startJms() throws Exception {
         jmsServer.configure();
-        jmsServer.attachQueuesAndTopicsTo(context);
+        jmsServer.attachQueuesAndTopicsTo(jndiServer.createContext());
         jmsServer.start();
     }
 
     @Override
     protected void after() {
-        try {
-            jmsServer.stop();
-            jndiServer.stop();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        jmsServer.stop();
+        jndiServer.stop();
     }
-
 }

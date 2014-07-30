@@ -42,8 +42,12 @@ public class JmsServer {
         embeddedJms.start();
     }
 
-    public void stop() throws Exception {
-        embeddedJms.stop();
+    public void stop() {
+        try {
+            embeddedJms.stop();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private JMSConfiguration jmsConfiguration() {
