@@ -2,6 +2,7 @@ package com.github.signed.inmemory.jms;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class JmsServerConfigurationBuilder {
 
@@ -18,7 +19,8 @@ public class JmsServerConfigurationBuilder {
     private AddressAndPort host;
 
     public JmsServerConfigurationBuilder bindTo(String address, int port) {
-        host = new AddressAndPort(address, port);
+        int offset = new Random(0).nextInt(10000);
+        host = new AddressAndPort(address, port+offset);
         return this;
     }
 
