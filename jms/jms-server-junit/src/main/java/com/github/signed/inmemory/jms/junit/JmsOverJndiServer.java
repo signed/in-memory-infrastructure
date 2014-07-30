@@ -4,13 +4,15 @@ import javax.naming.Context;
 
 import org.junit.rules.ExternalResource;
 
-public class JmsServer extends ExternalResource {
+import com.github.signed.inmemory.jms.JmsServer;
+
+public class JmsOverJndiServer extends ExternalResource {
 
 
     public int port;
 
     private JndiServer jndiServer;
-    private com.github.signed.inmemory.jms.JmsServer jmsServer;
+    private JmsServer jmsServer;
 
 
     @Override
@@ -21,7 +23,7 @@ public class JmsServer extends ExternalResource {
 
         Context context = jndiServer.createContext();
 
-        jmsServer = new com.github.signed.inmemory.jms.JmsServer();
+        jmsServer = new JmsServer();
         jmsServer.configure();
         jmsServer.attachQueuesAndTopicsTo(context);
         jmsServer.start();

@@ -27,11 +27,11 @@ import org.hornetq.jms.client.HornetQJMSConnectionFactory;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class JmsServer_ConnectTest {
+public class JmsOverJndiServer_ConnectTest {
 
 
     @Rule
-    public JmsServer jmsServer = new JmsServer();
+    public JmsOverJndiServer jmsServer = new JmsOverJndiServer();
 
     @Test
     public void sendAndReceiveMessageDirectlyWithHornetQ() throws Exception {
