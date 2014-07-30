@@ -5,17 +5,17 @@ import java.net.UnknownHostException;
 import org.junit.rules.ExternalResource;
 
 import com.github.signed.inmemory.jms.JmsServer;
-import com.github.signed.inmemory.jms.JmsServerConfigurationBuilder;
-import com.github.signed.inmemory.jms.JndiConfigurationBuilder;
+import com.github.signed.inmemory.jms.JmsServerConfiguration;
+import com.github.signed.inmemory.jms.JndiConfiguration;
 import com.github.signed.inmemory.jms.JndiServer;
 
 public class JmsOverJndiServer extends ExternalResource {
     private final JndiServer jndiServer;
     private final JmsServer jmsServer;
 
-    public JmsOverJndiServer() {
-        jndiServer = new JndiServer(JndiConfigurationBuilder.anyJndiConfiguration());
-        jmsServer = new JmsServer(JmsServerConfigurationBuilder.configuration());
+    public JmsOverJndiServer(JndiConfiguration jndiServerConfiguration, JmsServerConfiguration jmsServerConfiguration) {
+        jndiServer = new JndiServer(jndiServerConfiguration);
+        jmsServer = new JmsServer(jmsServerConfiguration);
     }
 
     @Override

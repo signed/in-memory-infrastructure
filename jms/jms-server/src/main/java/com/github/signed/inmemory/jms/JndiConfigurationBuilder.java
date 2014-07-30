@@ -2,11 +2,11 @@ package com.github.signed.inmemory.jms;
 
 public class JndiConfigurationBuilder {
 
-    public static JndiConfiguration anyJndiConfiguration() {
-        return anyJndiConfigurationBut().build();
+    public static JndiConfiguration anyJndiServerConfiguration() {
+        return anyJndiServerConfigurationBut().build();
     }
 
-    public static JndiConfigurationBuilder anyJndiConfigurationBut() {
+    public static JndiConfigurationBuilder anyJndiServerConfigurationBut() {
         JndiConfigurationBuilder builder = new JndiConfigurationBuilder();
         builder.bindJndiTo("localhost", 1099);
         String bindAddressRmi = "localhost";
