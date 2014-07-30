@@ -1,26 +1,31 @@
 package com.github.signed.inmemory.jms;
 
-import java.util.Collections;
-import java.util.List;
-
 public class JmsServerConfiguration {
-    public final AddressAndPort host;
+    private final AddressAndPort host;
+    private final Iterable<TopicConfiguration> topicConfigurations;
+    private final Iterable<QueueConfiguration> queuesToCreate;
+    private final String connectionFactoryName;
 
-    public JmsServerConfiguration(AddressAndPort host) {
+    public JmsServerConfiguration(AddressAndPort host, String connectionFactoryName, Iterable<TopicConfiguration> topicConfigurations, Iterable<QueueConfiguration> queuesToCreate) {
         this.host = host;
+        this.topicConfigurations = topicConfigurations;
+        this.queuesToCreate = queuesToCreate;
+        this.connectionFactoryName = connectionFactoryName;
     }
 
-    public List<QueueConfiguration> queues() {
-        QueueConfiguration queueConfiguration = new QueueConfiguration("queue1");
-        return Collections.singletonList(queueConfiguration);
+    public Iterable<QueueConfiguration> queues() {
+        return queuesToCreate;
     }
 
     public Iterable<TopicConfiguration> topics() {
-        TopicConfiguration topicConfiguration = new TopicConfiguration("topic1");
-        return Collections.singletonList(topicConfiguration);
+        return topicConfigurations;
     }
 
     public String connectionFactoryName() {
-        return "cf";
+        return connectionFactoryName;
+    }
+
+    public AddressAndPort host(){
+        return host;
     }
 }

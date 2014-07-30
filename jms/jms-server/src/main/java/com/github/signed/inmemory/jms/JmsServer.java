@@ -2,7 +2,6 @@ package com.github.signed.inmemory.jms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -30,7 +29,7 @@ public class JmsServer {
     }
 
     public void configure() {
-        embeddedJms.setConfiguration(coreConfiguration(configuration.host));
+        embeddedJms.setConfiguration(coreConfiguration(configuration.host()));
         embeddedJms.setJmsConfiguration(jmsConfiguration());
     }
 
@@ -71,7 +70,7 @@ public class JmsServer {
     }
 
     private void configureQueues(JMSConfiguration jmsConfig) {
-        List<QueueConfiguration> queueConfigurations = configuration.queues();
+        Iterable<QueueConfiguration> queueConfigurations = configuration.queues();
         for (QueueConfiguration configuration : queueConfigurations) {
             jmsConfig.getQueueConfigurations().add(new JMSQueueConfigurationImpl(configuration.name(), null, false, configuration.name()));
         }

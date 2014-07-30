@@ -32,8 +32,11 @@ import com.github.signed.inmemory.jms.JndiConfigurationBuilder;
 
 public class JmsOverJndiServer_ConnectTest {
 
+    private final JmsServerConfigurationBuilder jmsConfiguration = JmsServerConfigurationBuilder.anyJmsServerConfigurationBut().createQueue("queue1").createTopic("topic1");
+    private final JndiConfigurationBuilder jndiConfiguration = JndiConfigurationBuilder.anyJndiServerConfigurationBut();
+
     @Rule
-    public JmsOverJndiServer jmsServer = new JmsOverJndiServer(JndiConfigurationBuilder.anyJndiServerConfiguration(), JmsServerConfigurationBuilder.anyJmsServerConfiguration());
+    public JmsOverJndiServer jmsServer = new JmsOverJndiServer(jndiConfiguration.build(), jmsConfiguration.build());
 
     @Test
     public void sendAndReceiveMessageDirectlyWithHornetQ() throws Exception {
