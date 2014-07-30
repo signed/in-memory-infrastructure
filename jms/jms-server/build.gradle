@@ -1,3 +1,5 @@
+apply from: "$rootDir/gradle/buildscript/central.gradle"
+
 dependencies {
     compile(
             'org.hornetq:hornetq-jms:2.2.13.Final'
