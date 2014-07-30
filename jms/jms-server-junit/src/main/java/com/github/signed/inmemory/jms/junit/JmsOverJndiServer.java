@@ -11,15 +11,13 @@ import com.github.signed.inmemory.jms.JndiServer;
 public class JmsOverJndiServer extends ExternalResource {
 
 
-    public int port;
-
     private JndiServer jndiServer;
     private JmsServer jmsServer;
 
 
     @Override
     protected void before() throws Throwable {
-        jndiServer = new JndiServer(JndiConfigurationBuilder.configuration());
+        jndiServer = new JndiServer(JndiConfigurationBuilder.anyJndiConfiguration());
         jndiServer.configure();
         jndiServer.start();
 
