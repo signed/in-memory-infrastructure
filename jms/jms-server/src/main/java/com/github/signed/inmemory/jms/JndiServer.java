@@ -1,4 +1,4 @@
-package com.github.signed.inmemory.jms.junit;
+package com.github.signed.inmemory.jms;
 
 import java.net.UnknownHostException;
 import java.util.Hashtable;

@@ -5,6 +5,7 @@ import javax.naming.Context;
 import org.junit.rules.ExternalResource;
 
 import com.github.signed.inmemory.jms.JmsServer;
+import com.github.signed.inmemory.jms.JndiServer;
 
 public class JmsOverJndiServer extends ExternalResource {
 

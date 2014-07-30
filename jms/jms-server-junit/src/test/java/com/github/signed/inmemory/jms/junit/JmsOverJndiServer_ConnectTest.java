@@ -29,7 +29,6 @@ import org.junit.Test;
 
 public class JmsOverJndiServer_ConnectTest {
 
-
     @Rule
     public JmsOverJndiServer jmsServer = new JmsOverJndiServer();
 
