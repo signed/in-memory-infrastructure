@@ -1,14 +1,9 @@
-
-
 dependencies{
     compile(
             'junit:junit:4.11'
             , project(':jms:jms-server')
     )
     testCompile(
-            'org.jboss.xnio:xnio-nio:3.2.0.Final'
-            , 'org.hornetq:hornetq-jms-client:2.4.3.Final'
-            , 'org.jboss:jboss-remote-naming:2.0.1.Final'
-
+            'org.hornetq:hornetq-jms-client:2.2.13.Final'
     )
 }

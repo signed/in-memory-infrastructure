@@ -1,11 +1,9 @@
 dependencies {
-
     compile(
-            'org.apache.activemq:activemq-broker:5.9.0'
-            , 'org.slf4j:slf4j-simple:1.7.5'
-    )
-
-    compile(
-            'org.hornetq:hornetq-jms-server:2.4.3.Final'
+            'org.hornetq:hornetq-jms:2.2.13.Final'
+            , 'org.hornetq:hornetq-core:2.2.13.Final'
+            , 'org.jboss.naming:jnpserver:5.0.3.GA'
+            , 'org.jboss.javaee:jboss-jms-api:1.1.0.GA'
+            , 'org.jboss.netty:netty:3.2.5.Final'
     )
 }
