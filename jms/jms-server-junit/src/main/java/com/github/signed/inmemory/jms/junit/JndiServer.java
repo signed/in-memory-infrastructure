@@ -1,8 +1,11 @@
 package com.github.signed.inmemory.jms.junit;
 
 import java.net.UnknownHostException;
+import java.util.Hashtable;
 
 import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.jnp.server.Main;
 import org.jnp.server.NamingBeanImpl;
@@ -29,5 +32,12 @@ public class JndiServer {
     public void stop() {
         jndiServer.stop();
         naming.stop();
+    }
+
+    public Context createContext() throws NamingException {
+        Hashtable<String, String> env = new Hashtable<String, String>();
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
+        env.put(Context.PROVIDER_URL, "jnp://localhost:1099");
+        return new InitialContext(env);
     }
 }
