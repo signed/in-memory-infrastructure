@@ -13,6 +13,7 @@ import org.jnp.server.NamingBeanImpl;
 public class JndiServer {
 
     private static final String InitialContextFactory = "org.jnp.interfaces.NamingContextFactory";
+    public static final int FindAnyOpenPort = 0;
 
     private final Main jndiServer = new Main();
     private final NamingBeanImpl naming = new NamingBeanImpl();
@@ -26,9 +27,9 @@ public class JndiServer {
         try {
             jndiServer.setNamingInfo(naming);
             jndiServer.setBindAddress(configuration.jndi.address);
-            jndiServer.setPort(configuration.jndi.port);
+            jndiServer.setPort(FindAnyOpenPort);
             jndiServer.setRmiBindAddress(configuration.rmi.address);
-            jndiServer.setRmiPort(configuration.rmi.port);
+            jndiServer.setRmiPort(FindAnyOpenPort);
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
@@ -46,11 +47,16 @@ public class JndiServer {
     }
 
     public String providerUrl() {
-        return String.format("jnp://%s:%d", configuration.jndi.address, configuration.jndi.port);
+        return String.format("jnp://%s:%d", configuration.jndi.address, port());
+    }
+
+    private int port() {
+        return jndiServer.getPort();
     }
 
     public void start() {
         try {
+            //TODO unset system property after server is started, not sure this will work
             System.setProperty(Context.INITIAL_CONTEXT_FACTORY, InitialContextFactory);
             naming.start();
             jndiServer.start();
