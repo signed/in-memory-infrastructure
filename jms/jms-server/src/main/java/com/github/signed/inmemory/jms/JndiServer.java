@@ -12,19 +12,26 @@ import org.jnp.server.NamingBeanImpl;
 
 public class JndiServer {
 
+    public static final String InitialContextFactory = "org.jnp.interfaces.NamingContextFactory";
+
     private final Main jndiServer = new Main();
     private final NamingBeanImpl naming = new NamingBeanImpl();
+    private final JndiConfiguration configuration;
+
+    public JndiServer(JndiConfiguration configuration) {
+        this.configuration = configuration;
+    }
 
     public void configure() throws UnknownHostException {
-        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
         jndiServer.setNamingInfo(naming);
-        jndiServer.setPort(1099);
-        jndiServer.setBindAddress("localhost");
-        jndiServer.setRmiPort(1098);
-        jndiServer.setRmiBindAddress("localhost");
+        jndiServer.setBindAddress(configuration.jndi.address);
+        jndiServer.setPort(configuration.jndi.port);
+        jndiServer.setRmiBindAddress(configuration.rmi.address);
+        jndiServer.setRmiPort(configuration.rmi.port);
     }
 
     public void start() throws Exception {
+        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, InitialContextFactory);
         naming.start();
         jndiServer.start();
     }
@@ -36,7 +43,7 @@ public class JndiServer {
 
     public Context createContext() throws NamingException {
         Hashtable<String, String> env = new Hashtable<String, String>();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
+        env.put(Context.INITIAL_CONTEXT_FACTORY, InitialContextFactory);
         env.put(Context.PROVIDER_URL, "jnp://localhost:1099");
         return new InitialContext(env);
     }

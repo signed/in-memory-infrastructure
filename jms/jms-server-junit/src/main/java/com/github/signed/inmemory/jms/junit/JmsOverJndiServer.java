@@ -5,6 +5,7 @@ import javax.naming.Context;
 import org.junit.rules.ExternalResource;
 
 import com.github.signed.inmemory.jms.JmsServer;
+import com.github.signed.inmemory.jms.JndiConfigurationBuilder;
 import com.github.signed.inmemory.jms.JndiServer;
 
 public class JmsOverJndiServer extends ExternalResource {
@@ -18,7 +19,7 @@ public class JmsOverJndiServer extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-        jndiServer = new JndiServer();
+        jndiServer = new JndiServer(JndiConfigurationBuilder.configuration());
         jndiServer.configure();
         jndiServer.start();
 
