@@ -1,7 +1,5 @@
 package com.github.signed.inmemory.jms.junit;
 
-import java.net.UnknownHostException;
-
 import org.junit.rules.ExternalResource;
 
 import com.github.signed.inmemory.jms.JmsServer;
@@ -24,20 +22,36 @@ public class JmsOverJndiServer extends ExternalResource {
         startJms();
     }
 
-    private void startJndi() throws UnknownHostException {
+    private void startJndi() {
         jndiServer.configure();
         jndiServer.start();
     }
 
-    private void startJms() throws Exception {
-        jmsServer.configure();
-        jmsServer.attachQueuesAndTopicsTo(jndiServer.createContext());
-        jmsServer.start();
+    private void startJms() {
+        try {
+            jmsServer.configure();
+            jmsServer.attachQueuesAndTopicsTo(jndiServer.createContext());
+            jmsServer.start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     protected void after() {
         jmsServer.stop();
         jndiServer.stop();
+    }
+
+    public String connectionFactoryName() {
+        return jmsServer.connectionFactoryName();
+    }
+
+    public String providerUrl() {
+        return jndiServer.providerUrl();
+    }
+
+    public String initialContextFactory() {
+        return jndiServer.initialContextFactoryFullQualifiedClassName();
     }
 }

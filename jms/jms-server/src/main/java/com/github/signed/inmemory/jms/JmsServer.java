@@ -49,6 +49,10 @@ public class JmsServer {
         }
     }
 
+    public String connectionFactoryName(){
+        return configuration.connectionFactoryName();
+    }
+
     private JMSConfiguration jmsConfiguration() {
         JMSConfiguration jmsConfig = new JMSConfigurationImpl();
         configureConnectionFactory(jmsConfig);

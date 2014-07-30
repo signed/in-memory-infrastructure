@@ -22,12 +22,16 @@ public class JndiServer {
         this.configuration = configuration;
     }
 
-    public void configure() throws UnknownHostException {
-        jndiServer.setNamingInfo(naming);
-        jndiServer.setBindAddress(configuration.jndi.address);
-        jndiServer.setPort(configuration.jndi.port);
-        jndiServer.setRmiBindAddress(configuration.rmi.address);
-        jndiServer.setRmiPort(configuration.rmi.port);
+    public void configure()  {
+        try {
+            jndiServer.setNamingInfo(naming);
+            jndiServer.setBindAddress(configuration.jndi.address);
+            jndiServer.setPort(configuration.jndi.port);
+            jndiServer.setRmiBindAddress(configuration.rmi.address);
+            jndiServer.setRmiPort(configuration.rmi.port);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Context createContext() throws NamingException {

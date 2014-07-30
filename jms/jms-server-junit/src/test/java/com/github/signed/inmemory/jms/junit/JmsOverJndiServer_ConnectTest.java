@@ -24,19 +24,19 @@ import com.github.signed.inmemory.jms.JndiConfigurationBuilder;
 
 public class JmsOverJndiServer_ConnectTest {
 
-    private final JmsServerConfigurationBuilder jmsConfiguration = JmsServerConfigurationBuilder.anyJmsServerConfigurationBut().createQueue("queue1").createTopic("topic1");
-    private final JndiConfigurationBuilder jndiConfiguration = JndiConfigurationBuilder.anyJndiServerConfigurationBut();
+    private final JmsServerConfigurationBuilder jmsConfiguration = JmsServerConfigurationBuilder.anyJmsServerConfigurationBut().createQueue("queue1").createTopic("topic1").connectionFactoryLookupName("WhatEverYouWant");
+    private final JndiConfigurationBuilder jndiConfiguration = JndiConfigurationBuilder.anyJndiServerConfigurationBut().bindJndiTo("127.0.0.1", 1979);
 
     @Rule
-    public JmsOverJndiServer jmsServer = new JmsOverJndiServer(jndiConfiguration.build(), jmsConfiguration.build());
+    public final JmsOverJndiServer jmsServer = new JmsOverJndiServer(jndiConfiguration.build(), jmsConfiguration.build());
 
     @Test
     public void sendAndReceiveMessageViaJndiLookup() throws Exception {
         Hashtable<String, String> env = new Hashtable<String, String>();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
-        env.put(Context.PROVIDER_URL, "jnp://localhost:1099");
+        env.put(Context.INITIAL_CONTEXT_FACTORY, jmsServer.initialContextFactory());
+        env.put(Context.PROVIDER_URL, jmsServer.providerUrl());
         Context context = new InitialContext(env);
-        ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup("/cf");
+        ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(jmsServer.connectionFactoryName());
         Queue queue = (Queue) context.lookup("queue1");
 
         assertThatProduceConsumeRoundTripIsWorking(connectionFactory, queue);
