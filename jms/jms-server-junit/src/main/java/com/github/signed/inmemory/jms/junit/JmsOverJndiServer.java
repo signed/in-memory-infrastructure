@@ -5,6 +5,7 @@ import javax.naming.Context;
 import org.junit.rules.ExternalResource;
 
 import com.github.signed.inmemory.jms.JmsServer;
+import com.github.signed.inmemory.jms.JmsServerConfigurationBuilder;
 import com.github.signed.inmemory.jms.JndiConfigurationBuilder;
 import com.github.signed.inmemory.jms.JndiServer;
 
@@ -23,7 +24,7 @@ public class JmsOverJndiServer extends ExternalResource {
 
         Context context = jndiServer.createContext();
 
-        jmsServer = new JmsServer();
+        jmsServer = new JmsServer(JmsServerConfigurationBuilder.configuration());
         jmsServer.configure();
         jmsServer.attachQueuesAndTopicsTo(context);
         jmsServer.start();

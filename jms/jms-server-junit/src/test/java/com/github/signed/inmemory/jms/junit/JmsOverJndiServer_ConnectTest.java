@@ -44,13 +44,13 @@ public class JmsOverJndiServer_ConnectTest {
     }
 
     @Test
-    public void testStackoverflowClient() throws Exception {
+    public void sendAndReceiveMessageViaJndiLookup() throws Exception {
         Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
         env.put(Context.PROVIDER_URL, "jnp://localhost:1099");
         Context context = new InitialContext(env);
         ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup("/cf");
-        Queue queue = (Queue) context.lookup("queue/queue1");
+        Queue queue = (Queue) context.lookup("queue1");
 
         assertThatProduceConsumeRoundTripIsWorking(connectionFactory, queue);
     }
