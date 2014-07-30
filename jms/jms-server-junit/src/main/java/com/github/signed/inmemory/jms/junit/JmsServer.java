@@ -22,8 +22,6 @@ import org.hornetq.jms.server.config.impl.JMSConfigurationImpl;
 import org.hornetq.jms.server.config.impl.JMSQueueConfigurationImpl;
 import org.hornetq.jms.server.config.impl.TopicConfigurationImpl;
 import org.hornetq.jms.server.embedded.EmbeddedJMS;
-import org.jnp.server.Main;
-import org.jnp.server.NamingBeanImpl;
 import org.junit.rules.ExternalResource;
 
 public class JmsServer extends ExternalResource {
@@ -31,24 +29,20 @@ public class JmsServer extends ExternalResource {
 
     public int port;
     private EmbeddedJMS jmsServer;
-    private NamingBeanImpl naming;
-    private Main jndiServer;
+
+    private JndiServer jndiServer2;
+
+    public JmsServer() {
+    }
 
 
     @Override
     protected void before() throws Throwable {
         System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
 
-        naming = new NamingBeanImpl();
-        naming.start();
-
-        jndiServer = new Main();
-        jndiServer.setNamingInfo(naming);
-        jndiServer.setPort(1099);
-        jndiServer.setBindAddress("localhost");
-        jndiServer.setRmiPort(1098);
-        jndiServer.setRmiBindAddress("localhost");
-        jndiServer.start();
+        jndiServer2 = new JndiServer();
+        jndiServer2.configure();
+        jndiServer2.start();
 
         Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
@@ -61,6 +55,8 @@ public class JmsServer extends ExternalResource {
         jmsServer.setJmsConfiguration(jmsConfiguration);
         jmsServer.setContext(context);
         jmsServer.start();
+
+
     }
 
     private JMSConfiguration jmsConfiguration() {
@@ -98,10 +94,10 @@ public class JmsServer extends ExternalResource {
     protected void after() {
         try {
             jmsServer.stop();
-            jndiServer.stop();
-            naming.stop();
+            jndiServer2.stop();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
+
 }
