@@ -42,6 +42,7 @@ configure(subprojects.findAll { !'in-memory-infrastructure'.equals(it.parent.nam
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
     }
 
     group 'com.github.signed.inmemory.' + parent.name
