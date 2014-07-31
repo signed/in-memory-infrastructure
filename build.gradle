@@ -15,7 +15,7 @@ buildscript {
 idea { project { languageLevel = '1.6' } }
 
 subprojects {
-    version = '0.0.3-SNAPSHOT'
+    version = '0.0.4-SNAPSHOT'
 
     plugins.withType(JavaPlugin) {
         dependencies {
