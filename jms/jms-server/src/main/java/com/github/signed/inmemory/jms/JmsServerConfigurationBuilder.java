@@ -10,29 +10,23 @@ public class JmsServerConfigurationBuilder {
 
     public static JmsServerConfigurationBuilder anyJmsServerConfigurationBut() {
         JmsServerConfigurationBuilder builder = new JmsServerConfigurationBuilder();
-        builder.bindTo("localhost", 5446).connectionFactoryLookupName("ConnectionFactoryName");
+        builder.bindTo(5446);
         return builder;
     }
 
     private final List<TopicConfiguration> topicsToCreate = new ArrayList<TopicConfiguration>();
 
     private final List<QueueConfiguration> queuesToCreate = new ArrayList<QueueConfiguration>();
-    private String connectionFactoryName;
     private AddressAndPort host;
 
-    public JmsServerConfigurationBuilder bindTo(String address, int port) {
+    public JmsServerConfigurationBuilder bindTo(int port) {
         int offset = new Random(0).nextInt(10000);
-        host = new AddressAndPort(address, port+offset);
+        host = new AddressAndPort("localhost", port+offset);
         return this;
     }
 
     public JmsServerConfigurationBuilder createQueue(String name) {
         queuesToCreate.add(new QueueConfiguration(name));
-        return this;
-    }
-
-    public JmsServerConfigurationBuilder connectionFactoryLookupName(String connectionFactoryName) {
-        this.connectionFactoryName = connectionFactoryName;
         return this;
     }
 
@@ -42,6 +36,6 @@ public class JmsServerConfigurationBuilder {
     }
 
     public JmsServerConfiguration build() {
-        return new JmsServerConfiguration(host, connectionFactoryName, topicsToCreate, queuesToCreate);
+        return new JmsServerConfiguration(host, topicsToCreate, queuesToCreate);
     }
 }

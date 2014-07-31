@@ -10,7 +10,7 @@ public class JmsServer_TryDifferentPortIfConfiguredOneIsInUseTest {
     public void lookForANewPortIfOriginalPortIsNotInUse() throws Exception {
         ServerSocket serverSocket = new ServerSocket(1979);
 
-        JmsServer jmsServer = new JmsServer(JmsServerConfigurationBuilder.anyJmsServerConfigurationBut().bindTo("localhost", 1979).build());
+        JmsServer jmsServer = new JmsServer(JmsServerConfigurationBuilder.anyJmsServerConfigurationBut().bindTo(1979).build());
         jmsServer.configure();
         jmsServer.start();
 

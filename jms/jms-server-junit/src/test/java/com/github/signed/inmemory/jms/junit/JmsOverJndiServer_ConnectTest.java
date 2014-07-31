@@ -24,8 +24,8 @@ import com.github.signed.inmemory.jndi.JndiServerConfigurationBuilder;
 
 public class JmsOverJndiServer_ConnectTest {
 
-    private final JmsServerConfigurationBuilder jmsConfiguration = JmsServerConfigurationBuilder.anyJmsServerConfigurationBut().createQueue("queue1").createTopic("topic1").connectionFactoryLookupName("WhatEverYouWant");
-    private final JndiServerConfigurationBuilder jndiConfiguration = JndiServerConfigurationBuilder.anyJndiServerConfigurationBut().bindJndiTo("127.0.0.1", 1979);
+    private final JmsServerConfigurationBuilder jmsConfiguration = JmsServerConfigurationBuilder.anyJmsServerConfigurationBut().createQueue("queue1").createTopic("topic1");
+    private final JndiServerConfigurationBuilder jndiConfiguration = JndiServerConfigurationBuilder.anyJndiServerConfigurationBut().bindJndiTo(1979);
 
     @Rule
     public final JmsOverJndiServer jmsServer = new JmsOverJndiServer(jndiConfiguration.build(), jmsConfiguration.build());

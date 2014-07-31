@@ -6,13 +6,11 @@ public class JmsServerConfiguration {
     private final AddressAndPort host;
     private final Iterable<TopicConfiguration> topicConfigurations;
     private final Iterable<QueueConfiguration> queuesToCreate;
-    private final String connectionFactoryName;
 
-    public JmsServerConfiguration(AddressAndPort host, String connectionFactoryName, Iterable<TopicConfiguration> topicConfigurations, Iterable<QueueConfiguration> queuesToCreate) {
+    public JmsServerConfiguration(AddressAndPort host, Iterable<TopicConfiguration> topicConfigurations, Iterable<QueueConfiguration> queuesToCreate) {
         this.host = host;
         this.topicConfigurations = topicConfigurations;
         this.queuesToCreate = queuesToCreate;
-        this.connectionFactoryName = connectionFactoryName;
     }
 
     public Iterable<QueueConfiguration> queues() {
@@ -24,7 +22,7 @@ public class JmsServerConfiguration {
     }
 
     public String connectionFactoryName() {
-        return connectionFactoryName;
+        return "ConnectionFactoryName";
     }
 
     public AddressAndPort host(){

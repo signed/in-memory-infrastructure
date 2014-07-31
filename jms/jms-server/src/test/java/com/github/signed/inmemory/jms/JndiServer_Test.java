@@ -13,7 +13,7 @@ public class JndiServer_Test {
 
     @Test
     public void configureJndiServerToSelectAnOpenPort() throws Exception {
-        JndiServerConfiguration configuration = JndiServerConfigurationBuilder.anyJndiServerConfigurationBut().bindJndiTo("127.0.0.1", 1979).build();
+        JndiServerConfiguration configuration = JndiServerConfigurationBuilder.anyJndiServerConfigurationBut().bindJndiTo(1979).build();
         JndiServer jndiServer = new JndiServer(configuration);
         jndiServer.configure();
 

@@ -6,21 +6,21 @@ public class JndiServerConfigurationBuilder {
 
     public static JndiServerConfigurationBuilder anyJndiServerConfigurationBut() {
         JndiServerConfigurationBuilder builder = new JndiServerConfigurationBuilder();
-        builder.bindJndiTo("localhost", 1099);
-        builder.bindRmiTo("localhost", 1098);
+        builder.bindJndiTo(1099);
+        builder.bindRmiTo(1098);
         return builder;
     }
 
     private AddressAndPort jndi;
     private AddressAndPort rmi;
 
-    public JndiServerConfigurationBuilder bindRmiTo(String bindAddressRmi, int port) {
-        rmi = new AddressAndPort(bindAddressRmi, port);
+    public JndiServerConfigurationBuilder bindRmiTo(int port) {
+        rmi = new AddressAndPort("localhost", port);
         return this;
     }
 
-    public JndiServerConfigurationBuilder bindJndiTo(String jndiBindAddress, int port) {
-        jndi = new AddressAndPort(jndiBindAddress, port);
+    public JndiServerConfigurationBuilder bindJndiTo(int port) {
+        jndi = new AddressAndPort("localhost", port);
         return this;
     }
 
