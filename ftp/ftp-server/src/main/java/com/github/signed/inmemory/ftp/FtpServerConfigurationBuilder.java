@@ -4,6 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.signed.inmemory.shared.configuration.ExplicitPort;
+import com.github.signed.inmemory.shared.configuration.Port;
+import com.github.signed.inmemory.shared.configuration.RandomUserPort;
+
 public class FtpServerConfigurationBuilder {
 
     public static  FtpServerConfigurationBuilder ftpServer() {
@@ -12,10 +16,10 @@ public class FtpServerConfigurationBuilder {
 
     private final List<FtpUser> users = new ArrayList<FtpUser>();
     private File ftpRootDirectory;
-    private int port;
+    private Port port = new RandomUserPort();
 
-    public FtpServerConfigurationBuilder listeningOnPort(int port){
-        this.port = port;
+    public FtpServerConfigurationBuilder listeningOnPort(int port) {
+        this.port = new ExplicitPort(port);
         return this;
     }
 

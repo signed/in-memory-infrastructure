@@ -1,5 +1,9 @@
 package com.github.signed.inmemory.ftp;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -10,10 +14,6 @@ import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 public class FtpServer {
 
     private org.apache.ftpserver.FtpServer server;
@@ -21,7 +21,7 @@ public class FtpServer {
     private final UserHomeCreator userHomeCreator;
 
     public FtpServer(FtpServerConfiguration configuration) {
-        userHomeCreator = new UserHomeCreator(configuration.rootDirectory);
+        userHomeCreator = new UserHomeCreator(configuration.rootDirectory());
         this.configuration = configuration;
     }
 
@@ -30,7 +30,7 @@ public class FtpServer {
             UserManager userManager = createUserManager();
             FtpServerFactory serverFactory = new FtpServerFactory();
             ListenerFactory listenerFactory = new ListenerFactory();
-            listenerFactory.setPort(configuration.port);
+            listenerFactory.setPort(configuration.port());
             serverFactory.addListener("default", listenerFactory.createListener());
             serverFactory.setUserManager(userManager);
             server = serverFactory.createServer();
@@ -62,7 +62,7 @@ public class FtpServer {
     private InMemoryUserManager createUserManager() throws FtpException {
         InMemoryUserManager userManager = new InMemoryUserManager();
 
-        for (FtpUser user : configuration.users) {
+        for (FtpUser user : configuration.users()) {
             BaseUser baseUser = new BaseUser();
             baseUser.setName(user.login);
             baseUser.setPassword(user.password);

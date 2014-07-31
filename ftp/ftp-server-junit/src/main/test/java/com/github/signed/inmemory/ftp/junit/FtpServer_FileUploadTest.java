@@ -1,22 +1,23 @@
 package com.github.signed.inmemory.ftp.junit;
 
-import com.github.signed.inmemory.ftp.FtpServerConfigurationBuilder;
-import com.google.common.io.Files;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
+
+import com.github.signed.inmemory.ftp.FtpServerConfigurationBuilder;
+import com.google.common.io.Files;
 
 public class FtpServer_FileUploadTest {
 
     @Rule
-    public FtpServer ftpServer = new FtpServer(new FtpServerConfigurationBuilder().listeningOnPort(10021).registerAccountFor("bob", "secret"));
+    public FtpServer ftpServer = new FtpServer(new FtpServerConfigurationBuilder().registerAccountFor("bob", "secret"));
 
     @Test
     public void provideAccessToUploadedFile() throws Exception {

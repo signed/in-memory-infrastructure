@@ -22,7 +22,7 @@ public class FtpServer extends ExternalResource{
     protected void before() throws Throwable {
         ftpRoot.create();
         FtpServerConfiguration configuration = configurationBuilder.rootDirectoryAt(ftpRoot.getRoot()).build();
-        port = configuration.port;
+        port = configuration.port();
         ftpServer = new com.github.signed.inmemory.ftp.FtpServer(configuration);
         ftpServer.start();
     }
