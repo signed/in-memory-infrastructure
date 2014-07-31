@@ -26,9 +26,9 @@ public class JndiServer {
     public void configure()  {
         try {
             jndiServer.setNamingInfo(naming);
-            jndiServer.setBindAddress(configuration.jndi.address);
+            jndiServer.setBindAddress(configuration.jndi.address());
             jndiServer.setPort(FindAnyOpenPort);
-            jndiServer.setRmiBindAddress(configuration.rmi.address);
+            jndiServer.setRmiBindAddress(configuration.rmi.address());
             jndiServer.setRmiPort(FindAnyOpenPort);
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
@@ -47,7 +47,7 @@ public class JndiServer {
     }
 
     public String providerUrl() {
-        return String.format("jnp://%s:%d", configuration.jndi.address, port());
+        return String.format("jnp://%s:%d", configuration.jndi.address(), port());
     }
 
     private int port() {

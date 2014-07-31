@@ -2,26 +2,24 @@ package com.github.signed.inmemory.jms;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.github.signed.inmemory.AddressAndPort;
+import com.github.signed.inmemory.ExplicitPort;
+import com.github.signed.inmemory.RandomUserPort;
 
 public class JmsServerConfigurationBuilder {
 
     public static JmsServerConfigurationBuilder anyJmsServerConfigurationBut() {
-        JmsServerConfigurationBuilder builder = new JmsServerConfigurationBuilder();
-        builder.bindTo(5446);
-        return builder;
+        return new JmsServerConfigurationBuilder();
     }
 
     private final List<TopicConfiguration> topicsToCreate = new ArrayList<TopicConfiguration>();
 
     private final List<QueueConfiguration> queuesToCreate = new ArrayList<QueueConfiguration>();
-    private AddressAndPort host;
+    private AddressAndPort host = new AddressAndPort(new RandomUserPort());
 
     public JmsServerConfigurationBuilder bindTo(int port) {
-        int offset = new Random(0).nextInt(10000);
-        host = new AddressAndPort("localhost", port+offset);
+        host = new AddressAndPort(new ExplicitPort(port));
         return this;
     }
 
@@ -38,4 +36,5 @@ public class JmsServerConfigurationBuilder {
     public JmsServerConfiguration build() {
         return new JmsServerConfiguration(host, topicsToCreate, queuesToCreate);
     }
+
 }

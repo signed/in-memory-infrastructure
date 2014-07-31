@@ -94,8 +94,8 @@ public class JmsServer {
         configuration.setJournalDirectory("build/data/journal");
         configuration.setSecurityEnabled(false);
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put(TransportConstants.HOST_PROP_NAME, host.address);
-        params.put(TransportConstants.PORT_PROP_NAME, host.port);
+        params.put(TransportConstants.HOST_PROP_NAME, host.address());
+        params.put(TransportConstants.PORT_PROP_NAME, host.port());
         configuration.getAcceptorConfigurations().add(new TransportConfiguration(NettyAcceptorFactory.class.getName(), params));
         TransportConfiguration connectorConfig = new TransportConfiguration(NettyConnectorFactory.class.getName(), params);
         configuration.getConnectorConfigurations().put("connector", connectorConfig);

@@ -1,26 +1,25 @@
 package com.github.signed.inmemory.jndi;
 
 import com.github.signed.inmemory.AddressAndPort;
+import com.github.signed.inmemory.ExplicitPort;
+import com.github.signed.inmemory.LetJavaSocketFindFreePort;
 
 public class JndiServerConfigurationBuilder {
 
     public static JndiServerConfigurationBuilder anyJndiServerConfigurationBut() {
-        JndiServerConfigurationBuilder builder = new JndiServerConfigurationBuilder();
-        builder.bindJndiTo(1099);
-        builder.bindRmiTo(1098);
-        return builder;
+        return new JndiServerConfigurationBuilder();
     }
 
-    private AddressAndPort jndi;
-    private AddressAndPort rmi;
+    private AddressAndPort jndi = new AddressAndPort(new LetJavaSocketFindFreePort());
+    private AddressAndPort rmi = new AddressAndPort(new LetJavaSocketFindFreePort());
 
     public JndiServerConfigurationBuilder bindRmiTo(int port) {
-        rmi = new AddressAndPort("localhost", port);
+        rmi = new AddressAndPort(new ExplicitPort(port));
         return this;
     }
 
     public JndiServerConfigurationBuilder bindJndiTo(int port) {
-        jndi = new AddressAndPort("localhost", port);
+        jndi = new AddressAndPort(new ExplicitPort(port));
         return this;
     }
 
