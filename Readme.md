@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/signed/in-memory-infrastructure.svg?branch=master)](https://travis-ci.org/signed/in-memory-infrastructure)
+
 ### ftp
 [mina ftpserver project](http://mina.apache.org/ftpserver-project/index.htm)
 
