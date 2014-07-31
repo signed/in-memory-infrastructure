@@ -1,4 +1,4 @@
-package com.github.signed.inmemory;
+package com.github.signed.inmemory.shared.configuration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

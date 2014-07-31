@@ -1,6 +1,6 @@
 package com.github.signed.inmemory.jndi;
 
-import com.github.signed.inmemory.AddressAndPort;
+import com.github.signed.inmemory.shared.configuration.AddressAndPort;
 
 public class JndiServerConfiguration {
     public final AddressAndPort jndi;

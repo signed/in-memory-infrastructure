@@ -11,9 +11,7 @@ import org.jnp.server.Main;
 import org.jnp.server.NamingBeanImpl;
 
 public class JndiServer {
-
     private static final String InitialContextFactory = "org.jnp.interfaces.NamingContextFactory";
-    public static final int FindAnyOpenPort = 0;
 
     private final Main jndiServer = new Main();
     private final NamingBeanImpl naming = new NamingBeanImpl();
@@ -27,9 +25,9 @@ public class JndiServer {
         try {
             jndiServer.setNamingInfo(naming);
             jndiServer.setBindAddress(configuration.jndi.address());
-            jndiServer.setPort(FindAnyOpenPort);
+            jndiServer.setPort(configuration.jndi.port());
             jndiServer.setRmiBindAddress(configuration.rmi.address());
-            jndiServer.setRmiPort(FindAnyOpenPort);
+            jndiServer.setRmiPort(configuration.rmi.port());
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }

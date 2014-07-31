@@ -2,7 +2,8 @@ apply from: "$rootDir/gradle/buildscript/central.gradle"
 
 dependencies {
     compile(
-            'org.hornetq:hornetq-jms:2.2.13.Final'
+            project(':shared:configuration')
+            , 'org.hornetq:hornetq-jms:2.2.13.Final'
             , 'org.hornetq:hornetq-core:2.2.13.Final'
             , 'org.jboss.naming:jnpserver:5.0.3.GA'
             , 'org.jboss.javaee:jboss-jms-api:1.1.0.GA'

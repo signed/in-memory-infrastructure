@@ -20,7 +20,7 @@ import org.hornetq.jms.server.config.impl.JMSQueueConfigurationImpl;
 import org.hornetq.jms.server.config.impl.TopicConfigurationImpl;
 import org.hornetq.jms.server.embedded.EmbeddedJMS;
 
-import com.github.signed.inmemory.AddressAndPort;
+import com.github.signed.inmemory.shared.configuration.AddressAndPort;
 
 public class JmsServer {
     private final EmbeddedJMS embeddedJms = new EmbeddedJMS();

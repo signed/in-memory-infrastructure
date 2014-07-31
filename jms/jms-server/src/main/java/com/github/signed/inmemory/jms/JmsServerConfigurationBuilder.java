@@ -3,9 +3,9 @@ package com.github.signed.inmemory.jms;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.signed.inmemory.AddressAndPort;
-import com.github.signed.inmemory.ExplicitPort;
-import com.github.signed.inmemory.RandomUserPort;
+import com.github.signed.inmemory.shared.configuration.AddressAndPort;
+import com.github.signed.inmemory.shared.configuration.ExplicitPort;
+import com.github.signed.inmemory.shared.configuration.RandomUserPort;
 
 public class JmsServerConfigurationBuilder {
 

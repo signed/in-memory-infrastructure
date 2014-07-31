@@ -1,4 +1,4 @@
-package com.github.signed.inmemory;
+package com.github.signed.inmemory.shared.configuration;
 
 public class LetJavaSocketFindFreePort implements Port{
     @Override

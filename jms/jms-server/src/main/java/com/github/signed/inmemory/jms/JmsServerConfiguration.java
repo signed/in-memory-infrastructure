@@ -1,6 +1,6 @@
 package com.github.signed.inmemory.jms;
 
-import com.github.signed.inmemory.AddressAndPort;
+import com.github.signed.inmemory.shared.configuration.AddressAndPort;
 
 public class JmsServerConfiguration {
     private final AddressAndPort host;
