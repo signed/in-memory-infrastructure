@@ -1,5 +1,7 @@
 package com.github.signed.inmemory.jms;
 
+import com.github.signed.inmemory.AddressAndPort;
+
 public class JmsServerConfiguration {
     private final AddressAndPort host;
     private final Iterable<TopicConfiguration> topicConfigurations;

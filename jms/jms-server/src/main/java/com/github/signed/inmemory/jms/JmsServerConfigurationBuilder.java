@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.github.signed.inmemory.AddressAndPort;
+
 public class JmsServerConfigurationBuilder {
 
     public static JmsServerConfigurationBuilder anyJmsServerConfigurationBut() {

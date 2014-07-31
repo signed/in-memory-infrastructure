@@ -1,4 +1,4 @@
-package com.github.signed.inmemory.jms;
+package com.github.signed.inmemory.jndi;
 
 import java.net.UnknownHostException;
 import java.util.Hashtable;
@@ -17,9 +17,9 @@ public class JndiServer {
 
     private final Main jndiServer = new Main();
     private final NamingBeanImpl naming = new NamingBeanImpl();
-    private final JndiConfiguration configuration;
+    private final JndiServerConfiguration configuration;
 
-    public JndiServer(JndiConfiguration configuration) {
+    public JndiServer(JndiServerConfiguration configuration) {
         this.configuration = configuration;
     }
 

@@ -1,4 +1,4 @@
-package com.github.signed.inmemory.jms;
+package com.github.signed.inmemory;
 
 public class AddressAndPort {
 
