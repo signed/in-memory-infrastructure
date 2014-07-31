@@ -1,7 +1,5 @@
 apply plugin: 'nexus'
 
-println doom
-
 modifyPom {
     project {
         name 'in memory infrastructure'
