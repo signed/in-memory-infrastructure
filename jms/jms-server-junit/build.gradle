@@ -4,6 +4,7 @@ dependencies{
     compile(
             'junit:junit:4.11'
             , project(':jms:jms-server')
+            , project(':jndi:jndi-server')
     )
     testCompile(
             'org.hornetq:hornetq-jms-client:2.2.13.Final'

@@ -1,1 +1,6 @@
-include 'ftp:ftp-server', 'ftp:ftp-server-junit', 'jms:jms-server', 'jms:jms-server-junit', 'mail:mail-server', 'mail:mail-server-junit', 'sftp:sftp-server', 'sftp:sftp-server-junit', 'shared:configuration'
+include 'shared:configuration'
+include 'ftp:ftp-server', 'ftp:ftp-server-junit'
+include 'jndi:jndi-server'
+include 'jms:jms-server', 'jms:jms-server-junit'
+include 'mail:mail-server', 'mail:mail-server-junit'
+include 'sftp:sftp-server', 'sftp:sftp-server-junit'

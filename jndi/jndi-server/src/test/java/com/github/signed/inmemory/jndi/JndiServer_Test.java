@@ -1,13 +1,9 @@
-package com.github.signed.inmemory.jms;
+package com.github.signed.inmemory.jndi;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
-
-import com.github.signed.inmemory.jndi.JndiServer;
-import com.github.signed.inmemory.jndi.JndiServerConfiguration;
-import com.github.signed.inmemory.jndi.JndiServerConfigurationBuilder;
 
 public class JndiServer_Test {
 
