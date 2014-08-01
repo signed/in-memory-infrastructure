@@ -14,12 +14,17 @@ public class JmsServerConfigurationBuilder {
     }
 
     private final List<TopicConfiguration> topicsToCreate = new ArrayList<TopicConfiguration>();
-
     private final List<QueueConfiguration> queuesToCreate = new ArrayList<QueueConfiguration>();
     private AddressAndPort host = new AddressAndPort(new RandomUserPort());
+    private String connectionFactoryName = "ConnectionFactoryName";
 
     public JmsServerConfigurationBuilder bindTo(int port) {
         host = new AddressAndPort(new ExplicitPort(port));
+        return this;
+    }
+
+    public JmsServerConfigurationBuilder publishConnectionFactoryUnder(String connectionFactoryName){
+        this.connectionFactoryName = connectionFactoryName;
         return this;
     }
 
@@ -34,7 +39,7 @@ public class JmsServerConfigurationBuilder {
     }
 
     public JmsServerConfiguration build() {
-        return new JmsServerConfiguration(host, topicsToCreate, queuesToCreate);
+        return new JmsServerConfiguration(host, topicsToCreate, queuesToCreate, connectionFactoryName);
     }
 
 }
