@@ -65,7 +65,7 @@ ext.nexusPassword = environment.repositoryPassword
 nexus {
     attachJavadoc = true
     attachTests = true
-    sign = true
+    sign = signedDeployment
     repositoryUrl = environment.urls.release
     snapshotRepositoryUrl = environment.urls.snapshot
 }
