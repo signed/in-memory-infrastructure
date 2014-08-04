@@ -35,8 +35,8 @@ def environments = [
                 repositoryLogin: deploymentNexusLocalLogin,
                 repositoryPassword: deploymentNexusLocalPassword,
                 'urls': [
-                        'snapshot': 'http://localhost:8081/nexus/content/repositories/snapshots',
-                        'release' : 'http://localhost:8081/nexus/content/repositories/releases'
+                        'snapshot': localNexusSnapshotRepository,
+                        'release' : localNexusReleaseRepository
 
                 ]
         ],
