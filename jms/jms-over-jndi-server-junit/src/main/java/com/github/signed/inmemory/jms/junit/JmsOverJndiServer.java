@@ -28,23 +28,19 @@ public class JmsOverJndiServer extends ExternalResource {
         return jndiServer.initialContextFactoryFullQualifiedClassName();
     }
 
-    public void start() {
-        startJndi();
-        startJms();
-    }
-
-    public void stop() {
-        jndiServer.configure();
-        jndiServer.start();
-    }
-
     @Override
     protected void before() throws Throwable {
         start();
     }
 
+    public void start() {
+        startJndi();
+        startJms();
+    }
+
     private void startJndi() {
-        stop();
+        jndiServer.configure();
+        jndiServer.start();
     }
 
     private void startJms() {
@@ -57,9 +53,13 @@ public class JmsOverJndiServer extends ExternalResource {
         }
     }
 
-    @Override
-    protected void after() {
+    public void stop(){
         jmsServer.stop();
         jndiServer.stop();
+    }
+
+    @Override
+    protected void after() {
+        stop();
     }
 }
