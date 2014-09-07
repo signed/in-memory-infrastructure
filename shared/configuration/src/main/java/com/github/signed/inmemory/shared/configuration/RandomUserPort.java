@@ -8,14 +8,12 @@ import java.util.Random;
  */
 public class RandomUserPort implements Port {
 
-    private static final Random random = new Random(341882349);
-
     private final int port;
 
     public RandomUserPort() {
         int from = 1024;
         int to = 49151;
-        port = from + random.nextInt(to - from + 1);
+        port = from + new Random().nextInt(to - from + 1);
     }
 
     @Override
