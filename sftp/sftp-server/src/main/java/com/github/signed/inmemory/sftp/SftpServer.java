@@ -22,7 +22,7 @@ import com.github.signed.inmemory.shared.configuration.UserHomeCreator;
 
 public class SftpServer {
 
-    public static void main2(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
         File serverRoot = new File("/tmp/sftp/");
         serverRoot.mkdirs();
@@ -31,50 +31,9 @@ public class SftpServer {
 
         SftpServer sftpServer = new SftpServer(sftpServerConfiguration);
         sftpServer.start();
+
+        Thread.sleep(Long.MAX_VALUE);
         sftpServer.stop();
-
-        Thread.sleep(Long.MAX_VALUE);
-    }
-
-    public static void main(String [] args ) throws Exception{
-        final SshServer sshd = SshServer.setUpDefaultServer();
-        sshd.setPort(10022);
-        sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider("hostkey.ser"));
-
-        File serverRoot = new File("/tmp/sftp/");
-        serverRoot.mkdirs();
-        sshd.setFileSystemFactory(new TestFileSystemFactory(serverRoot));
-
-        List<NamedFactory<UserAuth>> userAuthFactories = new ArrayList<NamedFactory<UserAuth>>();
-        userAuthFactories.add(new UserAuthPassword.Factory());
-        userAuthFactories.add(new UserAuthPublicKey.Factory());
-        sshd.setUserAuthFactories(userAuthFactories);
-
-        sshd.setPasswordAuthenticator(new PasswordAuthenticator() {
-            public boolean authenticate(String username, String password, ServerSession session) {
-                return "signed".equals(username) && "secret".equals(password);
-            }
-        });
-
-        sshd.setPublickeyAuthenticator(new PublickeyAuthenticator() {
-            @Override
-            public boolean authenticate(String username, PublicKey key, ServerSession session) {
-                return true;
-            }
-        });
-
-        sshd.setCommandFactory(new ScpCommandFactory());
-
-        List<NamedFactory<Command>> namedFactoryList = new ArrayList<NamedFactory<Command>>();
-        namedFactoryList.add(new SftpSubsystem.Factory());
-        sshd.setSubsystemFactories(namedFactoryList);
-        try {
-            sshd.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Thread.sleep(Long.MAX_VALUE);
     }
 
 
@@ -136,6 +95,6 @@ public class SftpServer {
     }
 
     public HostKey hostKey() {
-        return new HostKey("6c:74:bd:b4:e4:fc:90:c0:6c:54:12:9b:cf:81:37:bf");
+        return new HostKey("07:89:f0:7f:59:dc:bd:91:59:2a:3f:ff:3a:60:f9:40");
     }
 }
