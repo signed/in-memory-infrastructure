@@ -1,11 +1,13 @@
 package com.github.signed.inmemory.ftp.junit;
 
-import com.github.signed.inmemory.ftp.FtpServerConfiguration;
-import com.github.signed.inmemory.ftp.FtpServerConfigurationBuilder;
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.rules.ExternalResource;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
+import com.github.signed.inmemory.ftp.FtpServerConfiguration;
+import com.github.signed.inmemory.ftp.FtpServerConfigurationBuilder;
 
 public class FtpServer extends ExternalResource{
     private final TemporaryFolder ftpRoot = new TemporaryFolder();
@@ -20,6 +22,10 @@ public class FtpServer extends ExternalResource{
 
     @Override
     protected void before() throws Throwable {
+        start();
+    }
+
+    public void start() throws IOException {
         ftpRoot.create();
         FtpServerConfiguration configuration = configurationBuilder.rootDirectoryAt(ftpRoot.getRoot()).build();
         port = configuration.port();
@@ -29,6 +35,10 @@ public class FtpServer extends ExternalResource{
 
     @Override
     protected void after() {
+        stop();
+    }
+
+    public void stop() {
         ftpServer.stop();
         ftpRoot.delete();
     }
