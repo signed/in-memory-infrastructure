@@ -1,0 +1,10 @@
+apply from: "$rootDir/gradle/buildscript/central.gradle"
+
+dependencies{
+    compile(
+            project(':sftp:sftp-server')
+    )
+    testCompile(
+            'net.schmizz:sshj:0.10.0'
+    )
+}

@@ -10,7 +10,7 @@ import com.github.signed.inmemory.shared.configuration.RandomUserPort;
 
 public class FtpServerConfigurationBuilder {
 
-    public static  FtpServerConfigurationBuilder ftpServer() {
+    public static FtpServerConfigurationBuilder ftpServer() {
         return new FtpServerConfigurationBuilder();
     }
 

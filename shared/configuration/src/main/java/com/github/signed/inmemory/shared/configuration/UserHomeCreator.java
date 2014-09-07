@@ -1,4 +1,4 @@
-package com.github.signed.inmemory.ftp;
+package com.github.signed.inmemory.shared.configuration;
 
 import java.io.File;
 

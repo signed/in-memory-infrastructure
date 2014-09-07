@@ -14,6 +14,8 @@ import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
 
+import com.github.signed.inmemory.shared.configuration.UserHomeCreator;
+
 public class FtpServer {
 
     private org.apache.ftpserver.FtpServer server;

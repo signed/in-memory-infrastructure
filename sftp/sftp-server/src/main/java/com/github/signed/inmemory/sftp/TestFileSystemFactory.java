@@ -1,4 +1,4 @@
-package infrastructure.sftp;
+package com.github.signed.inmemory.sftp;
 
 import java.io.File;
 import java.io.IOException;
