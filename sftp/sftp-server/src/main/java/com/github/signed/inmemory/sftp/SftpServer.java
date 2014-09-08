@@ -1,22 +1,19 @@
 package com.github.signed.inmemory.sftp;
 
 import java.io.File;
-import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.KeyPairProvider;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.server.Command;
-import org.apache.sshd.server.PasswordAuthenticator;
-import org.apache.sshd.server.PublickeyAuthenticator;
 import org.apache.sshd.server.UserAuth;
 import org.apache.sshd.server.auth.UserAuthPassword;
 import org.apache.sshd.server.auth.UserAuthPublicKey;
 import org.apache.sshd.server.command.ScpCommandFactory;
-import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
-import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 
 import com.github.signed.inmemory.shared.configuration.UserHomeCreator;
@@ -37,12 +34,11 @@ public class SftpServer {
         sftpServer.stop();
     }
 
+    private static final KeyPairProvider keyPairProvider = InMemoryKeyPair.GenerateNewKeyPair();
 
     private final UserHomeCreator userHomeCreator;
     private final SftpServerConfiguration configuration;
-    private final KeyPairProvider keyPairProvider = new SimpleGeneratorHostKeyProvider("hostkey.ser");
     private SshServer sshd;
-
 
     public SftpServer(SftpServerConfiguration configuration) {
         userHomeCreator = new UserHomeCreator(configuration.userHomeDirectory());
@@ -52,29 +48,15 @@ public class SftpServer {
     public void start() {
         sshd = SshServer.setUpDefaultServer();
         sshd.setPort(configuration.port());
-
         sshd.setKeyPairProvider(keyPairProvider);
-
         sshd.setFileSystemFactory(new TestFileSystemFactory(configuration.userHomeDirectory()));
 
         List<NamedFactory<UserAuth>> userAuthFactories = new ArrayList<NamedFactory<UserAuth>>();
         userAuthFactories.add(new UserAuthPassword.Factory());
+        sshd.setPasswordAuthenticator(new SftpUserBackedPasswordAuthenticator(loginToUserDictionary()));
         userAuthFactories.add(new UserAuthPublicKey.Factory());
+        sshd.setPublickeyAuthenticator(new SftpUserBackedPublicKeyAuthenticator(loginToUserDictionary()));
         sshd.setUserAuthFactories(userAuthFactories);
-
-        sshd.setPasswordAuthenticator(new PasswordAuthenticator() {
-            public boolean authenticate(String username, String password, ServerSession session) {
-                return "signed".equals(username) && "secret".equals(password);
-            }
-        });
-
-        sshd.setPublickeyAuthenticator(new PublickeyAuthenticator() {
-            @Override
-            public boolean authenticate(String username, PublicKey key, ServerSession session) {
-                return true;
-            }
-        });
-
         sshd.setCommandFactory(new ScpCommandFactory());
 
         List<NamedFactory<Command>> namedFactoryList = new ArrayList<NamedFactory<Command>>();
@@ -88,16 +70,26 @@ public class SftpServer {
         }
     }
 
+    private Map<String, SftpUser> loginToUserDictionary() {
+        Map<String, SftpUser> users = new HashMap<String, SftpUser>();
+        for (SftpUser sftpUser : configuration.users()) {
+            users.put(sftpUser.login(), sftpUser);
+        }
+        return users;
+    }
+
     public void stop() {
         try {
-            sshd.stop();
+            //why do I need immediately?
+            sshd.stop(true);
+            //sshd.stop();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
     public HostKey hostKey() {
-
         return new HostKey(keyPairProvider.loadKey("ssh-dss").getPublic());
     }
+
 }

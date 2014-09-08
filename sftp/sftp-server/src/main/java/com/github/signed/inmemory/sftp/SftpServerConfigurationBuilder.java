@@ -1,6 +1,7 @@
 package com.github.signed.inmemory.sftp;
 
 import java.io.File;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,12 @@ public class SftpServerConfigurationBuilder {
     }
 
     public SftpServerConfigurationBuilder registerAccountFor(String login, String password) {
-        users.add(new SftpUser(login, password));
+        users.add(new SftpUser(login, password, null));
+        return this;
+    }
+
+    public SftpServerConfigurationBuilder registerAccountFor(String login, PublicKey publicKey) {
+        users.add(new SftpUser(login, null, publicKey));
         return this;
     }
 

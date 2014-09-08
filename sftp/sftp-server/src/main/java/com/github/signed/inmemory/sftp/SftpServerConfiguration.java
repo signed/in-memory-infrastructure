@@ -24,4 +24,8 @@ public class SftpServerConfiguration {
     public File userHomeDirectory(){
         return userHomeDirectory;
     }
+
+    public Iterable<SftpUser> users(){
+        return users;
+    }
 }

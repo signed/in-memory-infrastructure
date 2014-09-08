@@ -4,10 +4,10 @@ import java.io.File;
 
 public class UserHomeCreator {
 
-    private final File temporaryFtpRoot;
+    private final File userHomeDirectory;
 
-    public UserHomeCreator(File temporaryFtpRoot) {
-        this.temporaryFtpRoot = temporaryFtpRoot;
+    public UserHomeCreator(File userHomeDirectory) {
+        this.userHomeDirectory = userHomeDirectory;
     }
 
     public File createUserHome(String userName) {
@@ -17,6 +17,6 @@ public class UserHomeCreator {
     }
 
     public File userHomeFor(String userName) {
-        return new File(temporaryFtpRoot, userName);
+        return new File(userHomeDirectory, userName);
     }
 }
