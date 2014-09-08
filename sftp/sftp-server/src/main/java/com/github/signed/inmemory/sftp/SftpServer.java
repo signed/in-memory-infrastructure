@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.sshd.SshServer;
+import org.apache.sshd.common.KeyPairProvider;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.server.Command;
 import org.apache.sshd.server.PasswordAuthenticator;
@@ -39,6 +40,7 @@ public class SftpServer {
 
     private final UserHomeCreator userHomeCreator;
     private final SftpServerConfiguration configuration;
+    private final KeyPairProvider keyPairProvider = new SimpleGeneratorHostKeyProvider("hostkey.ser");
     private SshServer sshd;
 
 
@@ -51,7 +53,7 @@ public class SftpServer {
         sshd = SshServer.setUpDefaultServer();
         sshd.setPort(configuration.port());
 
-        sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider("hostkey.ser"));
+        sshd.setKeyPairProvider(keyPairProvider);
 
         sshd.setFileSystemFactory(new TestFileSystemFactory(configuration.userHomeDirectory()));
 
@@ -95,6 +97,7 @@ public class SftpServer {
     }
 
     public HostKey hostKey() {
-        return new HostKey("07:89:f0:7f:59:dc:bd:91:59:2a:3f:ff:3a:60:f9:40");
+
+        return new HostKey(keyPairProvider.loadKey("ssh-dss").getPublic());
     }
 }

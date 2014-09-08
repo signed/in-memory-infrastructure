@@ -2,6 +2,9 @@ dependencies {
     compile(
             project(':shared:configuration')
             , 'org.apache.sshd:sshd-sftp:0.9.0'
-            , 'org.slf4j:slf4j-simple:1.7.5'
+    )
+
+    testRuntime(
+            'org.slf4j:slf4j-simple:1.7.5'
     )
 }

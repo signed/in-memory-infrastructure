@@ -1,14 +1,16 @@
 package com.github.signed.inmemory.sftp;
 
+import java.security.PublicKey;
+
 public class HostKey {
 
-    private String fingerprint;
+    private final PublicKey publicKey;
 
-    public HostKey(String fingerprint) {
-        this.fingerprint = fingerprint;
+    public HostKey(PublicKey publicKey) {
+        this.publicKey = publicKey;
     }
 
-    public String fingerprint() {
-        return fingerprint;
+    public PublicKey publicKey(){
+        return publicKey;
     }
 }

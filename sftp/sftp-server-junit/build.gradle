@@ -4,7 +4,12 @@ dependencies{
     compile(
             project(':sftp:sftp-server')
     )
+
     testCompile(
             'net.schmizz:sshj:0.10.0'
+    )
+
+    testRuntime(
+            'org.slf4j:slf4j-simple:1.7.5'
     )
 }
