@@ -2,6 +2,7 @@ package com.github.signed.inmemory.ftp;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.ftpserver.FtpServerFactory;
@@ -51,14 +52,14 @@ public class FtpServer {
         if (!file.isDirectory()) {
             throw new RuntimeException(String.format("I'm sorry, but I do not know <%s>.", username));
         }
-        File[] files = file.listFiles();
-        if (files.length < 1) {
+        List<File> foundFiles = allUploadedFiles(file);
+        if (foundFiles.isEmpty()) {
             throw new RuntimeException(String.format("I'm sorry, but <%s> did not upload any files.", username));
         }
-        if (files.length > 1) {
-            throw new RuntimeException(String.format("Actually <%s> uploaded <%d> files. I'm sorry, but I do not know which one you want.", username, files.length));
+        if (foundFiles.size() > 1) {
+            throw new RuntimeException(String.format("Actually <%s> uploaded <%d> files. I'm sorry, but I do not know which one you want.", username, foundFiles.size()));
         }
-        return files[0];
+        return foundFiles.get(0);
     }
 
     private InMemoryUserManager createUserManager() throws FtpException {
@@ -84,5 +85,12 @@ public class FtpServer {
         authorities.add(new WritePermission());
         authorities.add(new TransferRatePermission(0, 0));
         return authorities;
+    }
+
+    private List<File> allUploadedFiles(File file) {
+        File[] files = file.listFiles();
+        ArrayList<File> paths = new ArrayList<File>(files.length);
+        paths.addAll(Arrays.asList(files));
+        return paths;
     }
 }
