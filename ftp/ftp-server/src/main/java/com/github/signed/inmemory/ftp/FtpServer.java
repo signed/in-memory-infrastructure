@@ -1,8 +1,13 @@
 package com.github.signed.inmemory.ftp;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.ftpserver.FtpServerFactory;
@@ -88,9 +93,34 @@ public class FtpServer {
     }
 
     private List<File> allUploadedFiles(File file) {
-        File[] files = file.listFiles();
-        ArrayList<File> paths = new ArrayList<File>(files.length);
-        paths.addAll(Arrays.asList(files));
+        final ArrayList<File> paths = new ArrayList<File>();
+
+        try {
+            Files.walkFileTree(file.toPath(), new FileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    paths.add(file.toFile());
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    throw new RuntimeException(exc);
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return paths;
     }
 }

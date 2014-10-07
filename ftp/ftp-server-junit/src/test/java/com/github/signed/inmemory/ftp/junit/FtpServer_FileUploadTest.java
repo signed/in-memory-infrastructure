@@ -29,6 +29,15 @@ public class FtpServer_FileUploadTest {
     }
 
     @Test
+    public void provideAccessToUploadedFileInSubdirectories() throws Exception {
+        bobUploads("directory/file.txt", "More content");
+
+        File uploadedFile = ftpServer.fileUploadedBy("bob");
+        assertThat(uploadedFile.getName(), is("file.txt"));
+        assertThat(contentOf(uploadedFile), is("More content"));
+    }
+
+    @Test
     public void tellCallerIfUserDoesNotExist() throws Exception {
         try {
             ftpServer.fileUploadedBy("some unknown user");
@@ -61,9 +70,9 @@ public class FtpServer_FileUploadTest {
         }
     }
 
-    private void bobUploads(String remotePath, String content1) {
+    private void bobUploads(String remotePath, String content) {
         FtpUploadToLocalHost uploader = new FtpUploadToLocalHost("bob", "secret", ftpServer.port);
-        uploader.upload(remotePath, content1);
+        uploader.upload(remotePath, content);
     }
 
     private String contentOf(File uploadedFile) throws IOException {
