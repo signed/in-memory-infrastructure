@@ -63,6 +63,10 @@ public class SftpServer {
         namedFactoryList.add(new SftpSubsystem.Factory());
         sshd.setSubsystemFactories(namedFactoryList);
 
+        for (SftpUser sftpUser : configuration.users()) {
+            userHomeCreator.createUserHome(sftpUser.login());
+        }
+
         try {
             sshd.start();
         } catch (Exception e) {

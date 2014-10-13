@@ -6,10 +6,9 @@ import org.junit.rules.TemporaryFolder;
 import com.github.signed.inmemory.sftp.HostKey;
 import com.github.signed.inmemory.sftp.SftpServerConfiguration;
 import com.github.signed.inmemory.sftp.SftpServerConfigurationBuilder;
+import com.github.signed.inmemory.shared.file.UploadedFiles;
 
 public class SftpServer extends ExternalResource {
-
-
     private final TemporaryFolder ftpRoot = new TemporaryFolder();
     private final SftpServerConfigurationBuilder configurationBuilder;
     private SftpServerConfiguration configuration;
@@ -33,7 +32,6 @@ public class SftpServer extends ExternalResource {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-
     }
 
     @Override
@@ -53,5 +51,9 @@ public class SftpServer extends ExternalResource {
 
     public HostKey hostKey() {
         return sftpServer.hostKey();
+    }
+
+    public UploadedFiles filesUploadedBy(String user) {
+        throw new RuntimeException("not implemented for " + user);
     }
 }
