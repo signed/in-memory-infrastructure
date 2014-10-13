@@ -44,6 +44,6 @@ public class FtpServer extends ExternalResource{
     }
 
     public File fileUploadedBy(String username) {
-        return ftpServer.fileUploadedBy(username);
+        return ftpServer.filesUploadedBy(username).singleFile();
     }
 }
