@@ -8,9 +8,6 @@ import org.junit.Test;
 import com.github.signed.inmemory.sftp.KeyPairGenerator;
 import com.github.signed.inmemory.sftp.SftpServerConfigurationBuilder;
 
-import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.userauth.keyprovider.KeyPairWrapper;
-
 public class SftpServer_ConnectTest {
 
     private KeyPair clientKeyPair = new KeyPairGenerator().rsa().generateKeyPair();
@@ -22,31 +19,21 @@ public class SftpServer_ConnectTest {
     @Rule
     public SftpServer sftpServer = new SftpServer(configurationBuilder);
 
+    @Rule
+    public final SftpClientBuilder clientBuilder = new SftpClientBuilder();
+
     @Test
     public void loginWithUserAndPassword() throws Exception {
-        final SSHClient ssh = new SSHClient();
-        ssh.addHostKeyVerifier(new PublicKeyVerifier(sftpServer.hostKey().publicKey()));
-        ssh.connect("localhost", sftpServer.port());
-        try {
-            ssh.authPassword("user", "password");
-            ssh.newSFTPClient().ls("/");
-        } finally {
-            ssh.disconnect();
-        }
+        clientBuilder.configureSshClient(sftpServer);
+        clientBuilder.loginAs("user", "password");
+        clientBuilder.client().ls("/");
     }
 
     @Test
     public void loginWithPublicKey() throws Exception {
-        final SSHClient ssh = new SSHClient();
-        ssh.addHostKeyVerifier(new PublicKeyVerifier(sftpServer.hostKey().publicKey()));
-
-        ssh.connect("localhost", sftpServer.port());
-        try {
-            ssh.authPublickey("sally", new KeyPairWrapper(clientKeyPair));
-            ssh.newSFTPClient().ls("/");
-        } finally {
-            ssh.disconnect();
-        }
+        clientBuilder.configureSshClient(sftpServer);
+        clientBuilder.loginAs("sally", clientKeyPair);
+        clientBuilder.client().ls("/");
     }
 
 }
