@@ -24,7 +24,7 @@ public class SftpClientBuilder extends ExternalResource {
     private String password;
     private KeyPair keyPair;
 
-    public SftpClientBuilder configureSshClient(SftpServer sftpServer) throws IOException {
+    public SftpClientBuilder connectTo(SftpServer sftpServer) throws IOException {
         hostKey = sftpServer.hostKey();
         port = sftpServer.port();
         return this;

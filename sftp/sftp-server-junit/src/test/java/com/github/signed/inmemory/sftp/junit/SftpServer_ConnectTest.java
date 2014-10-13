@@ -17,22 +17,19 @@ public class SftpServer_ConnectTest {
             .registerAccountFor("sally", clientKeyPair.getPublic());
 
     @Rule
-    public SftpServer sftpServer = new SftpServer(configurationBuilder);
-
-    @Rule
     public final SftpClientBuilder clientBuilder = new SftpClientBuilder();
+    @Rule
+    public SftpServer sftpServer = new SftpServer(configurationBuilder);
 
     @Test
     public void loginWithUserAndPassword() throws Exception {
-        clientBuilder.configureSshClient(sftpServer);
-        clientBuilder.loginAs("user", "password");
+        clientBuilder.connectTo(sftpServer).loginAs("user", "password");
         clientBuilder.client().ls("/");
     }
 
     @Test
     public void loginWithPublicKey() throws Exception {
-        clientBuilder.configureSshClient(sftpServer);
-        clientBuilder.loginAs("sally", clientKeyPair);
+        clientBuilder.connectTo(sftpServer).loginAs("sally", clientKeyPair);
         clientBuilder.client().ls("/");
     }
 
