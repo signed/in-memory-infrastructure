@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.KeyPairProvider;
 import org.apache.sshd.common.NamedFactory;
+import org.apache.sshd.common.file.FileSystemFactory;
 import org.apache.sshd.server.Command;
 import org.apache.sshd.server.UserAuth;
 import org.apache.sshd.server.auth.UserAuthPassword;
@@ -17,6 +18,7 @@ import org.apache.sshd.server.command.ScpCommandFactory;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 
 import com.github.signed.inmemory.shared.configuration.UserHomeCreator;
+import com.github.signed.inmemory.shared.file.UploadedFiles;
 
 public class SftpServer {
 
@@ -49,7 +51,7 @@ public class SftpServer {
         sshd = SshServer.setUpDefaultServer();
         sshd.setPort(configuration.port());
         sshd.setKeyPairProvider(keyPairProvider);
-        sshd.setFileSystemFactory(new TestFileSystemFactory(configuration.userHomeDirectory()));
+        setupUserHomeDirectories();
 
         List<NamedFactory<UserAuth>> userAuthFactories = new ArrayList<NamedFactory<UserAuth>>();
         userAuthFactories.add(new UserAuthPassword.Factory());
@@ -63,23 +65,11 @@ public class SftpServer {
         namedFactoryList.add(new SftpSubsystem.Factory());
         sshd.setSubsystemFactories(namedFactoryList);
 
-        for (SftpUser sftpUser : configuration.users()) {
-            userHomeCreator.createUserHome(sftpUser.login());
-        }
-
         try {
             sshd.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Map<String, SftpUser> loginToUserDictionary() {
-        Map<String, SftpUser> users = new HashMap<String, SftpUser>();
-        for (SftpUser sftpUser : configuration.users()) {
-            users.put(sftpUser.login(), sftpUser);
-        }
-        return users;
     }
 
     public void stop() {
@@ -96,4 +86,24 @@ public class SftpServer {
         return new HostKey(keyPairProvider.loadKey("ssh-dss").getPublic());
     }
 
+    public UploadedFiles filesUploadedBy(String user) {
+        File file = userHomeCreator.userHomeFor(user);
+        return new UploadedFiles(file, user);
+    }
+
+    private void setupUserHomeDirectories() {
+        FileSystemFactory fileSystemFactory = new SubDirectoryForEachUserSystemFactory(configuration.userHomeDirectory().toPath());
+        for (SftpUser sftpUser : configuration.users()) {
+            userHomeCreator.createUserHome(sftpUser.login());
+        }
+        sshd.setFileSystemFactory(fileSystemFactory);
+    }
+
+    private Map<String, SftpUser> loginToUserDictionary() {
+        Map<String, SftpUser> users = new HashMap<String, SftpUser>();
+        for (SftpUser sftpUser : configuration.users()) {
+            users.put(sftpUser.login(), sftpUser);
+        }
+        return users;
+    }
 }

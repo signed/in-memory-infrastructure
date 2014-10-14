@@ -9,7 +9,7 @@ import com.github.signed.inmemory.sftp.SftpServerConfigurationBuilder;
 import com.github.signed.inmemory.shared.file.UploadedFiles;
 
 public class SftpServer extends ExternalResource {
-    private final TemporaryFolder ftpRoot = new TemporaryFolder();
+    private final TemporaryFolder sftpRoot = new TemporaryFolder();
     private final SftpServerConfigurationBuilder configurationBuilder;
     private SftpServerConfiguration configuration;
     private com.github.signed.inmemory.sftp.SftpServer sftpServer;
@@ -25,8 +25,8 @@ public class SftpServer extends ExternalResource {
 
     public void start() {
         try {
-            ftpRoot.create();
-            configuration = configurationBuilder.userHomeDirectoryAt(ftpRoot.getRoot()).build();
+            sftpRoot.create();
+            configuration = configurationBuilder.userHomeDirectoryAt(sftpRoot.getRoot()).build();
             sftpServer = new com.github.signed.inmemory.sftp.SftpServer(configuration);
             sftpServer.start();
         } catch (Exception ex) {
@@ -41,7 +41,7 @@ public class SftpServer extends ExternalResource {
 
     public void stop() {
         sftpServer.stop();
-        ftpRoot.delete();
+        sftpRoot.delete();
     }
 
 
@@ -54,6 +54,6 @@ public class SftpServer extends ExternalResource {
     }
 
     public UploadedFiles filesUploadedBy(String user) {
-        throw new RuntimeException("not implemented for " + user);
+        return sftpServer.filesUploadedBy(user);
     }
 }

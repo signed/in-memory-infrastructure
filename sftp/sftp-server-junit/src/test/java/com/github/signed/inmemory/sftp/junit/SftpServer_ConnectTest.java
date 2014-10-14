@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.github.signed.inmemory.sftp.KeyPairGenerator;
 import com.github.signed.inmemory.sftp.SftpServerConfigurationBuilder;
+import com.github.signed.inmemory.sftp.junit.sshj.SftpClientBuilder;
 
 public class SftpServer_ConnectTest {
 

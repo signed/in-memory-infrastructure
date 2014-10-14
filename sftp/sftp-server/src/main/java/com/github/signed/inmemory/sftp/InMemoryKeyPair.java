@@ -21,6 +21,7 @@ package com.github.signed.inmemory.sftp;
 import java.security.KeyPair;
 import java.security.interfaces.DSAKey;
 import java.security.interfaces.RSAKey;
+import java.util.Collections;
 
 import org.apache.sshd.common.KeyPairProvider;
 
@@ -34,6 +35,11 @@ public class InMemoryKeyPair implements KeyPairProvider {
 
     public InMemoryKeyPair(KeyPair keyPair) {
         this.keyPair = keyPair;
+    }
+
+    @Override
+    public Iterable<KeyPair> loadKeys() {
+        return Collections.singletonList(keyPair);
     }
 
     public KeyPair loadKey(String type) {

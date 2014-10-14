@@ -1,4 +1,4 @@
-package com.github.signed.inmemory.sftp.junit;
+package com.github.signed.inmemory.sftp.junit.sshj;
 
 import java.io.IOException;
 import java.security.KeyPair;
@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.rules.ExternalResource;
 
 import com.github.signed.inmemory.sftp.HostKey;
+import com.github.signed.inmemory.sftp.junit.SftpServer;
 
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.sftp.SFTPClient;

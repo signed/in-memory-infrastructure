@@ -1,4 +1,4 @@
-package com.github.signed.inmemory.sftp.junit;
+package com.github.signed.inmemory.sftp.junit.sshj;
 
 import java.security.PublicKey;
 

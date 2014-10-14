@@ -1,7 +1,11 @@
 dependencies {
     compile(
             project(':shared:configuration')
-            , 'org.apache.sshd:sshd-sftp:0.9.0'
+            , 'org.apache.sshd:sshd-sftp:0.11.0'
+    )
+
+    testCompile(
+            'org.mockito:mockito-all:1.10.8'
     )
 
     testRuntime(
