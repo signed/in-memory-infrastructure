@@ -1,4 +1,4 @@
-//apply from: "$rootDir/gradle/buildscript/central.gradle"
+apply from: "$rootDir/gradle/buildscript/central.gradle"
 
 dependencies{
     compile(
