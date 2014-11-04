@@ -18,7 +18,7 @@ public class JndiServer_Test {
 
     @Test
     public void allowTheUserToPickAnExplicitPort() throws Exception {
-        JndiServerConfiguration configuration = JndiServerConfigurationBuilder.anyJndiServerConfigurationBut().bindJndiTo(1979).build();
+        JndiServerConfiguration configuration = JndiServerConfigurationBuilder.anyJndiServerConfigurationBut().listenOnPort(1979).build();
         JndiServer jndiServer = new JndiServer(configuration);
         jndiServer.configure();
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.signed.inmemory.shared.configuration.AddressAndPort;
 import com.github.signed.inmemory.shared.configuration.ExplicitPort;
+import com.github.signed.inmemory.shared.configuration.Port;
 import com.github.signed.inmemory.shared.configuration.RandomPort;
 
 public class JmsServerConfigurationBuilder {
@@ -18,8 +19,12 @@ public class JmsServerConfigurationBuilder {
     private AddressAndPort host = new AddressAndPort(RandomPort.AnyUserPort());
     private String connectionFactoryName = "ConnectionFactoryName";
 
-    public JmsServerConfigurationBuilder bindTo(int port) {
-        host = new AddressAndPort(new ExplicitPort(port));
+    public JmsServerConfigurationBuilder listenOnPort(int port) {
+        return listenOnPort(new ExplicitPort(port));
+    }
+
+    public JmsServerConfigurationBuilder listenOnPort(Port port) {
+        host = new AddressAndPort(port);
         return this;
     }
 

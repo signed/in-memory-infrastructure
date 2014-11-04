@@ -3,6 +3,7 @@ package com.github.signed.inmemory.jndi;
 import com.github.signed.inmemory.shared.configuration.AddressAndPort;
 import com.github.signed.inmemory.shared.configuration.ExplicitPort;
 import com.github.signed.inmemory.shared.configuration.LetJavaSocketFindFreePort;
+import com.github.signed.inmemory.shared.configuration.Port;
 
 public class JndiServerConfigurationBuilder {
 
@@ -13,8 +14,12 @@ public class JndiServerConfigurationBuilder {
     private AddressAndPort jndi = new AddressAndPort(new LetJavaSocketFindFreePort());
     private AddressAndPort rmi = new AddressAndPort(new LetJavaSocketFindFreePort());
 
-    public JndiServerConfigurationBuilder bindJndiTo(int port) {
-        jndi = new AddressAndPort(new ExplicitPort(port));
+    public JndiServerConfigurationBuilder listenOnPort(int port) {
+        return listenOnPort(new ExplicitPort(port));
+    }
+
+    public JndiServerConfigurationBuilder listenOnPort(Port port) {
+        jndi = new AddressAndPort(port);
         return this;
     }
 

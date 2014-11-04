@@ -18,8 +18,12 @@ public class FtpServerConfigurationBuilder {
     private File ftpRootDirectory;
     private Port port = RandomPort.AnyUserPort();
 
-    public FtpServerConfigurationBuilder listeningOnPort(int port) {
-        this.port = new ExplicitPort(port);
+    public FtpServerConfigurationBuilder listenOnPort(int port) {
+        return listenOnPort(new ExplicitPort(port));
+    }
+
+    public FtpServerConfigurationBuilder listenOnPort(Port port) {
+        this.port = port;
         return this;
     }
 

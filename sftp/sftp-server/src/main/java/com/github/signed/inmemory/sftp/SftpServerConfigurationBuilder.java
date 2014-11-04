@@ -19,8 +19,12 @@ public class SftpServerConfigurationBuilder {
     private File userHomeDirectory;
     private Port port = RandomPort.AnyUserPort();
 
-    public SftpServerConfigurationBuilder listeningOnPort(int port) {
-        this.port = new ExplicitPort(port);
+    public SftpServerConfigurationBuilder listenOnPort(int port) {
+        return listenOnPort(new ExplicitPort(port));
+    }
+
+    public SftpServerConfigurationBuilder listenOnPort(Port port) {
+        this.port = port;
         return this;
     }
 

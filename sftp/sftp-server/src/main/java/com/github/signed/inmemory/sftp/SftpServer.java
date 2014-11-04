@@ -27,7 +27,7 @@ public class SftpServer {
         File serverRoot = new File("/tmp/sftp/");
         serverRoot.mkdirs();
 
-        SftpServerConfiguration sftpServerConfiguration = SftpServerConfigurationBuilder.sftpServer().listeningOnPort(10022).userHomeDirectoryAt(serverRoot).build();
+        SftpServerConfiguration sftpServerConfiguration = SftpServerConfigurationBuilder.sftpServer().listenOnPort(10022).userHomeDirectoryAt(serverRoot).build();
 
         SftpServer sftpServer = new SftpServer(sftpServerConfiguration);
         sftpServer.start();
