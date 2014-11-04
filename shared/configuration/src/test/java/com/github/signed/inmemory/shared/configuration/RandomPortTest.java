@@ -6,17 +6,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 
-public class RandomUserPortTest {
+public class RandomPortTest {
 
     @Test
     public void returnTheSameRandomPortOverAndOverAgain() throws Exception {
-        RandomUserPort randomUserPort = new RandomUserPort();
+        Port randomPort = RandomPort.AnyUserPort();
 
-        assertThat(randomUserPort.port(), is(randomUserPort.port()));
+        assertThat(randomPort.port(), is(randomPort.port()));
     }
 
     @Test
     public void letsHopeThatTheOddsAreWithUse() throws Exception {
-        assertThat(new RandomUserPort().port(), not(new RandomUserPort().port()));
+        assertThat(RandomPort.AnyUserPort().port(), not(RandomPort.AnyUserPort().port()));
+    }
+
+    @Test
+    public void pickAPortWithinRange() throws Exception {
+        Port port = RandomPort.AnyWithin(12, 12);
+
+        assertThat(port.port(), is(12));
     }
 }

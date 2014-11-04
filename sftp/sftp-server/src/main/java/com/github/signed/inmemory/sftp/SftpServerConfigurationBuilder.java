@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.github.signed.inmemory.shared.configuration.ExplicitPort;
 import com.github.signed.inmemory.shared.configuration.Port;
-import com.github.signed.inmemory.shared.configuration.RandomUserPort;
+import com.github.signed.inmemory.shared.configuration.RandomPort;
 
 public class SftpServerConfigurationBuilder {
 
@@ -17,7 +17,7 @@ public class SftpServerConfigurationBuilder {
 
     private final List<SftpUser> users = new ArrayList<SftpUser>();
     private File userHomeDirectory;
-    private Port port = new RandomUserPort();
+    private Port port = RandomPort.AnyUserPort();
 
     public SftpServerConfigurationBuilder listeningOnPort(int port) {
         this.port = new ExplicitPort(port);
