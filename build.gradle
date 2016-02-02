@@ -2,12 +2,14 @@ apply plugin: 'idea'
 
 buildscript {
     repositories {
+        mavenLocal()
+        mavenCentral()
         jcenter()
     }
     dependencies {
         classpath(
                 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
-                , 'org.gradle.api.plugins:gradle-nexus-plugin:0.7'
+                , 'com.bmuschko:gradle-nexus-plugin:2.3.1'
         )
     }
 }

@@ -1,4 +1,4 @@
-apply plugin: 'nexus'
+apply plugin: 'com.bmuschko.nexus'
 
 modifyPom {
     project {
@@ -30,42 +30,17 @@ modifyPom {
     }
 }
 
-def environments = [
-        'local': [
-                repositoryLogin: deploymentNexusLocalLogin,
-                repositoryPassword: deploymentNexusLocalPassword,
-                'urls': [
-                        'snapshot': localNexusSnapshotRepository,
-                        'release' : localNexusReleaseRepository
-
-                ]
-        ],
-        'sonatype': [
-                repositoryLogin: deploymentSonatypeLogin,
-                repositoryPassword: deploymentSonatypePassword,
-                'urls': [
-                        'snapshot': 'https://oss.sonatype.org/content/repositories/snapshots',
-                        'release' : 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-                ]
-        ]
-]
-
-def intent = hasProperty('release') ? 'release' : 'snapshot'
-def target = hasProperty('sonatype') ? 'sonatype' : 'local'
-println "intent: $intent target: $target url: ${environments.get(target).urls.get(intent)}"
-
-def environment = environments.get(target)
 if (project.hasProperty('release')) {
     project.version -= '-SNAPSHOT'
 }
 
-ext.nexusUsername = environment.repositoryLogin
-ext.nexusPassword = environment.repositoryPassword
+
+extraArchive {
+    sources = true
+    tests = false
+    javadoc = true
+}
 
 nexus {
-    attachJavadoc = true
-    attachTests = true
-    sign = signedDeployment
-    repositoryUrl = environment.urls.release
-    snapshotRepositoryUrl = environment.urls.snapshot
+    sign = true
 }
